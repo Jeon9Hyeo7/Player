@@ -15,7 +15,7 @@ class PortalRepository(context: Context) {
         portalDao.insert(portal)
     }
 
-    suspend fun getPortals(): LiveData<List<Portal>> {
+    fun getPortals(): LiveData<List<Portal>> {
         return portalDao.getPortals()
     }
 
