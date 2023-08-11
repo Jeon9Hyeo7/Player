@@ -1,4 +1,4 @@
-package com.gil.phoenixplayer2
+package com.phoenix.phoenixplayer2
 
 import android.os.Bundle
 import androidx.leanback.app.RowsSupportFragment

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.gil.phoenixplayer2">
+    package="com.phoenix.phoenixplayer2">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PhoenixPlayer2">
         <activity
-            android:name=".MainActivity"
+            android:name="com.phoenix.phoenixplayer2.MainActivity"
             android:banner="@drawable/app_icon_your_company"
             android:exported="true"
             android:icon="@drawable/app_icon_your_company"

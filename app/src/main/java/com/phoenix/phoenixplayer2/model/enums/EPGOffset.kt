@@ -1,4 +1,4 @@
-package com.gil.phoenixplayer2.model.enums
+package com.phoenix.phoenixplayer2.model.enums
 
 enum class EPGOffset (val offset: String) {
     Under600("-06:00"),

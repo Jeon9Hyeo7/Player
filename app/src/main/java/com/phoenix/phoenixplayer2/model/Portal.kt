@@ -1,11 +1,11 @@
-package com.gil.phoenixplayer2.model
+package com.phoenix.phoenixplayer2.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.gil.phoenixplayer2.model.enums.EPGMode
-import com.gil.phoenixplayer2.model.enums.EPGOffset
-import com.gil.phoenixplayer2.model.enums.GroupChannelNumbering
-import com.gil.phoenixplayer2.model.enums.MacType
+import com.phoenix.phoenixplayer2.model.enums.EPGMode
+import com.phoenix.phoenixplayer2.model.enums.EPGOffset
+import com.phoenix.phoenixplayer2.model.enums.GroupChannelNumbering
+import com.phoenix.phoenixplayer2.model.enums.MacType
 import java.io.Serializable
 
 

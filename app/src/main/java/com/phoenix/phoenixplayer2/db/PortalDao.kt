@@ -1,10 +1,10 @@
-package com.gil.phoenixplayer2.db
+package com.phoenix.phoenixplayer2.db
 
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.gil.phoenixplayer2.model.Portal
+import com.phoenix.phoenixplayer2.model.Portal
 
 interface PortalDao {
     @Query("SELECT * FROM portals")

@@ -7,7 +7,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.gil.phoenixplayer2"
+        applicationId "com.phoenix.phoenixplayer2"
         minSdk 24
         targetSdk 32
         versionCode 1
