@@ -1,8 +1,9 @@
 # Player
 Iptv Ott Player with using Stalker API 
 
+Basically, this project consists of MVVM (Model - View - ViewModel) architecture and uses the Android Leanback Library to configure the overall UI/UX. The purpose of sharing this project is to update my legacy code (written in Java) to kotlin and for version control. 
 
-This project is basically written in Kotlin (my legacy code previously written in Java was rewritten in Kotlin) and the target device is Android 9.0 ++.
+However, if you look at this repo, you are welcome to refer to this project. 
 
+Also, if you raise an issue, I absolutely promise to answer with sincerity.
 
-This application uses the Leanback Library (i.e. it is suitable for use on TV)
