@@ -27,10 +27,4 @@ data class Portal(
     val serverUrl: String,
     val connected: Boolean
 ) : Serializable{
-
-
-
-
-
-
 }
