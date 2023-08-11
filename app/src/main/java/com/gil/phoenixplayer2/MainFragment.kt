@@ -5,7 +5,7 @@ import androidx.leanback.app.RowsSupportFragment
 /**
  *
   */
-class MainFragments : RowsSupportFragment() {
+class MainFragment : RowsSupportFragment() {
 
 
 
