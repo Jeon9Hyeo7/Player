@@ -1,5 +1,5 @@
 # Player
-Iptv Ott Player with using Stalker API 
+Iptv Ott Player with using Ministra API 
 
 Basically, this project consists of MVVM (Model - View - ViewModel) architecture and uses the Android Leanback Library to configure the overall UI/UX. The purpose of sharing this project is to update my legacy code (written in Java) to kotlin and for version control. 
 
