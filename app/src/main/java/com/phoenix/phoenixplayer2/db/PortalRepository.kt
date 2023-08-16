@@ -26,4 +26,8 @@ class PortalRepository(context: Context) {
     suspend fun delete(portal: Portal): Int { // 반환 타입 변경
         return portalDao.delete(portal)
     }
+
+    suspend fun clear(){
+        portalDao.clear()
+    }
 }

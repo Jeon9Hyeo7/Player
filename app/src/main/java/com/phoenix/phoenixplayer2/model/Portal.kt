@@ -11,7 +11,6 @@ import java.io.Serializable
 
 @Entity(tableName = "portals")
 data class Portal(
-    @PrimaryKey(autoGenerate = true) val id: Long= -1,
     val title: String = "",
     val url: String = "",
     val log_req: Boolean = false,
@@ -27,6 +26,9 @@ data class Portal(
     val serverUrl: String = "",
     val connected: Boolean = false
 ) : Serializable{
+
+    @PrimaryKey(autoGenerate = true)
+    var id: Long= 0
 
     override fun toString(): String {
         return title

@@ -7,7 +7,7 @@ import com.phoenix.phoenixplayer2.model.Portal
 @Dao
 interface PortalDao {
     @Query("SELECT * FROM portals")
-    fun getPortals(): LiveData<List<Portal>> // LiveData 추가
+    fun getPortals(): LiveData<List<Portal>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(portal: Portal)
@@ -16,5 +16,8 @@ interface PortalDao {
     suspend fun update(portal: Portal)
 
     @Delete
-    suspend fun delete(portal: Portal): Int // 반환 타입을 Int로 변경
+    suspend fun delete(portal: Portal): Int
+
+    @Query("DELETE FROM portals")
+    suspend fun clear()
 }
