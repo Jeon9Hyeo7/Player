@@ -2,9 +2,23 @@
     <string name="app_name">PhoenixPlayer2</string>
 
 
+    <!--Main Page-->
     <string name="connected">Connected</string>
     <string name="add_portal">Add Portal</string>
     <string name="portals">LIVE PORTALS</string>
+
+
+    <!--Edit Page-->
+    <string name="enter_your_name">Enter your portal name</string>
+    <string name="enter_your_url">Enter your portal url</string>
+    <string name="require_login">Login required?</string>
+    <string name="enter_user_id">Enter your ID</string>
+    <string name="enter_user_password">Enter your password</string>
+
+    <string name="epg_mode">EPG Mode</string>
+    <string name="epg_offset">EPG Offset</string>
+    <string name="group_channel_numbering">Group Channel Numbering</string>
+    <string name="mac_type">MAC Type</string>
 
 
 </resources>

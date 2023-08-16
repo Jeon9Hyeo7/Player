@@ -11,7 +11,7 @@ class PortalCardPresenter : PresenterSelector(){
         return PortalMainPresenter()
     }
 
-    internal class PortalMainPresenter : Presenter(){
+    private class PortalMainPresenter : Presenter(){
 
         override fun onCreateViewHolder(parent: ViewGroup?): ViewHolder {
             val inflater = LayoutInflater.from(parent?.context)

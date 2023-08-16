@@ -1,18 +1,15 @@
 package com.phoenix.phoenixplayer2
 
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.leanback.app.RowsSupportFragment
 import androidx.leanback.widget.*
-import androidx.lifecycle.Observer
-import com.phoenix.phoenixplayer2.db.PortalRepository
-import com.phoenix.phoenixplayer2.model.Portal
+import androidx.lifecycle.ViewModelProvider
 import com.phoenix.phoenixplayer2.view.PortalCardPresenter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.phoenix.phoenixplayer2.view.PortalViewModel
 
 /**
  *
@@ -21,6 +18,9 @@ class MainFragment : RowsSupportFragment() {
 
     private val mRowsAdapter: ArrayObjectAdapter = ArrayObjectAdapter(ListRowPresenter(0, false))
     private lateinit var mListRowsAdapter: ArrayObjectAdapter
+    private lateinit var portalViewModel: PortalViewModel
+
+
     companion object {
         private const val TAG: String = "MainFragment"
     }
@@ -39,8 +39,28 @@ class MainFragment : RowsSupportFragment() {
         onItemViewClickedListener = ItemClickedListener()
         val repo = (activity as MainActivity).getRepository()
         repo.getPortals().observe(this) {
-            mListRowsAdapter.clear()
-            mListRowsAdapter.add("")
+            portalViewModel.set(it)
+        }
+    }
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        setupViewModel()
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+
+    private fun setupViewModel(){
+        portalViewModel = ViewModelProvider(this)[PortalViewModel::class.java]
+        portalViewModel.data.observe(viewLifecycleOwner) {
+            if (mListRowsAdapter.size() == 0){
+                mListRowsAdapter.add("")
+            }
+            mListRowsAdapter.removeItems(1, mListRowsAdapter.size()-1)
             mListRowsAdapter.addAll(1, it)
         }
     }
@@ -54,7 +74,9 @@ class MainFragment : RowsSupportFragment() {
     }
 
 
-    internal class ItemSelectedListener : OnItemViewSelectedListener{
+
+
+    private class ItemSelectedListener : OnItemViewSelectedListener{
         override fun onItemSelected(
             itemViewHolder: Presenter.ViewHolder?,
             item: Any?,
@@ -62,15 +84,22 @@ class MainFragment : RowsSupportFragment() {
             row: Row?
         ) {
 
+
         }
     }
-    internal class ItemClickedListener : OnItemViewClickedListener{
+
+
+    inner class ItemClickedListener() : OnItemViewClickedListener{
         override fun onItemClicked(
             itemViewHolder: Presenter.ViewHolder?,
             item: Any?,
             rowViewHolder: RowPresenter.ViewHolder?,
             row: Row?
         ) {
+            val fragmentManager = activity!!.supportFragmentManager
+            if (item is String){
+                fragmentManager.beginTransaction().add(R.id.main_frame, PortalEditFragment()).addToBackStack(null).commit()
+            }
 
         }
 

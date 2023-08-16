@@ -28,9 +28,11 @@ data class Portal(
 ) : Serializable{
 
     @PrimaryKey(autoGenerate = true)
-    var id: Long= 0
+    var id: Long= -1
+
+
 
     override fun toString(): String {
-        return title
+        return "Portal{id :$id,  title:$title, url:$url, server:$serverUrl} "
     }
 }

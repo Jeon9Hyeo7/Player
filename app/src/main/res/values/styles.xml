@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Style.EditPortal" parent="">
+        <item name="android:layout_width">450dp</item>
+        <item name="android:layout_height">50dp</item>
+    </style>
+
+    <style name="Style.EditPortal.EditText" parent="Style.EditPortal">
+        <item name="android:padding">5dp</item>
+        <item name="android:background">@drawable/edit_text_shape</item>
+    </style>
+
+    <style name="Style.EditPortal.Spinner" parent="Style.EditPortal">
+        <item name="android:background">@drawable/spinner_shape</item>
+    </style>
+
+</resources>

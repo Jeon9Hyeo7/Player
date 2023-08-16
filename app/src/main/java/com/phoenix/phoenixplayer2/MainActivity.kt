@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.TestOnly
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -39,4 +40,20 @@ class MainActivity : FragmentActivity() {
         return repository
     }
 
+
+
+    /*override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_PROG_GREEN){
+            val portal = Portal(title = "Example Title", url = "http://example.com", connected = true, exp_date = "2023-08-16")
+            CoroutineScope(Dispatchers.IO).launch {
+                repository.insert(portal)
+            }
+        }
+        else if (keyCode == KeyEvent.KEYCODE_PROG_BLUE){
+            CoroutineScope(Dispatchers.IO).launch {
+                repository.clear()
+            }
+        }
+        return super.onKeyUp(keyCode, event)
+    }*/
 }
