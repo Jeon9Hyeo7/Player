@@ -20,5 +20,7 @@
     <string name="group_channel_numbering">Group Channel Numbering</string>
     <string name="mac_type">MAC Type</string>
 
+    <string name="quick_insert">Quick Insert</string>
+
 
 </resources>

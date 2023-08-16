@@ -14,5 +14,9 @@
     <style name="Style.EditPortal.Spinner" parent="Style.EditPortal">
         <item name="android:background">@drawable/spinner_shape</item>
     </style>
-
+    <style name="Style.EditPortal.Button" parent="Style.EditPortal">
+        <item name="android:background">@drawable/edit_button_shape</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">san-serif-light</item>
+    </style>
 </resources>

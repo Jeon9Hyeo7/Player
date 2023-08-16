@@ -35,4 +35,5 @@ data class Portal(
     override fun toString(): String {
         return "Portal{id :$id,  title:$title, url:$url, server:$serverUrl} "
     }
+
 }

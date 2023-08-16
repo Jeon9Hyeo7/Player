@@ -1,6 +1,7 @@
 package com.phoenix.phoenixplayer2.model.enums
 
 enum class EPGOffset (val offset: String) {
+    Under000("None"),
     Under600("-06:00"),
     Under530("-05:30"),
     Under500("-05:00"),
@@ -13,7 +14,6 @@ enum class EPGOffset (val offset: String) {
     Under130("-01:30"),
     Under100("-01:00"),
     Under030("-06:30"),
-    Under000("None"),
     Over030("+00:30"),
     Over100("+01:00"),
     Over130("+01:30"),

@@ -1,10 +1,12 @@
 package com.phoenix.phoenixplayer2
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.fragment.app.FragmentManager
 import androidx.leanback.app.RowsSupportFragment
 import androidx.leanback.widget.*
 import androidx.lifecycle.ViewModelProvider
@@ -14,7 +16,7 @@ import com.phoenix.phoenixplayer2.view.PortalViewModel
 /**
  *
   */
-class MainFragment : RowsSupportFragment() {
+class MainFragment : RowsSupportFragment() , FragmentManager.OnBackStackChangedListener{
 
     private val mRowsAdapter: ArrayObjectAdapter = ArrayObjectAdapter(ListRowPresenter(0, false))
     private lateinit var mListRowsAdapter: ArrayObjectAdapter
@@ -90,6 +92,7 @@ class MainFragment : RowsSupportFragment() {
 
 
     inner class ItemClickedListener() : OnItemViewClickedListener{
+
         override fun onItemClicked(
             itemViewHolder: Presenter.ViewHolder?,
             item: Any?,
@@ -97,12 +100,18 @@ class MainFragment : RowsSupportFragment() {
             row: Row?
         ) {
             val fragmentManager = activity!!.supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
             if (item is String){
-                fragmentManager.beginTransaction().add(R.id.main_frame, PortalEditFragment()).addToBackStack(null).commit()
+                transaction.add(R.id.main_frame, PortalEditFragment()).addToBackStack(null).hide(this@MainFragment).commit()
             }
-
         }
 
     }
+
+    override fun onBackStackChanged() {
+        Log.d(TAG, "Changed!")
+    }
+
+
 }
 

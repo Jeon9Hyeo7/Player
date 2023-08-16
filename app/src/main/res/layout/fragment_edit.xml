@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/background_portal"
+    >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,11 +64,50 @@
             android:inputType="textPassword"
             />
         <Spinner
+            android:id = "@+id/spinner_epg_mode"
             style="@style/Style.EditPortal.Spinner"
             android:prompt = "@string/epg_mode"
             android:layout_marginTop="25dp"
             app:layout_constraintStart_toStartOf="@id/checkBox"
             app:layout_constraintTop_toBottomOf="@id/user_pw"
+            />
+        <Spinner
+            android:id = "@+id/spinner_epg_offset"
+            style="@style/Style.EditPortal.Spinner"
+            app:layout_constraintStart_toStartOf="@id/spinner_epg_mode"
+            app:layout_constraintTop_toBottomOf="@id/spinner_epg_mode"
+            android:layout_marginTop="5dp"
+            />
+        <Spinner
+            android:id = "@+id/spinner_grouping"
+            style="@style/Style.EditPortal.Spinner"
+            app:layout_constraintStart_toStartOf="@id/spinner_epg_offset"
+            app:layout_constraintTop_toBottomOf="@id/spinner_epg_offset"
+            android:layout_marginTop="5dp"
+            />
+        <Spinner
+            android:id = "@+id/spinner_mac_type"
+            style="@style/Style.EditPortal.Spinner"
+            app:layout_constraintStart_toStartOf="@id/spinner_grouping"
+            app:layout_constraintTop_toBottomOf="@id/spinner_grouping"
+            android:layout_marginTop="5dp"
+            />
+
+        <Button
+            android:id = "@+id/button_edit"
+            style="@style/Style.EditPortal.Button"
+            app:layout_constraintTop_toBottomOf="@id/spinner_mac_type"
+            app:layout_constraintStart_toStartOf="@id/spinner_mac_type"
+            android:layout_marginTop="30dp"
+            android:text="@string/add_portal"
+            />
+        <Button
+            android:id = "@+id/button_quick"
+            style="@style/Style.EditPortal.Button"
+            app:layout_constraintTop_toBottomOf="@id/button_edit"
+            app:layout_constraintStart_toStartOf="@id/button_edit"
+            android:layout_marginTop="10dp"
+            android:text="@string/quick_insert"
             />
 
 
