@@ -47,6 +47,11 @@
                 android:name="android.media.tv.input"
                 android:resource="@xml/tv_input" />
         </service>
+        <activity android:name=".TvActivity"
+            android:launchMode="singleTop"
+            >
+
+        </activity>
 
     </application>
 

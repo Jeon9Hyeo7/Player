@@ -1,8 +1,14 @@
 package com.phoenix.phoenixplayer2
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import com.phoenix.phoenixplayer2.db.portal.PortalRepository
+import com.phoenix.phoenixplayer2.model.Portal
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Loads [MainFragment].
@@ -18,6 +24,7 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         repository = PortalRepository(this)
+        findHistory()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.portal_fragment, MainFragment())
@@ -28,20 +35,18 @@ class MainActivity : FragmentActivity() {
         return repository
     }
 
-
-
-    /*override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_PROG_GREEN){
-            val portal = Portal(title = "Example Title", url = "http://example.com", connected = true, exp_date = "2023-08-16")
-            CoroutineScope(Dispatchers.IO).launch {
-                repository.insert(portal)
+    private fun findHistory(){
+        CoroutineScope(Dispatchers.IO).launch {
+            if (repository.getConnectedPortal().isNotEmpty()){
+                val connectedPortal = repository.getConnectedPortal()[0]
+                val intent = Intent(this@MainActivity, TvActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                intent.putExtra(Portal.PORTAL_INTENT_TAG, connectedPortal)
+                startActivity(intent)
             }
         }
-        else if (keyCode == KeyEvent.KEYCODE_PROG_BLUE){
-            CoroutineScope(Dispatchers.IO).launch {
-                repository.clear()
-            }
-        }
-        return super.onKeyUp(keyCode, event)
-    }*/
+    }
+
+
+
 }

@@ -2,6 +2,7 @@ package com.phoenix.phoenixplayer2
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
+import android.content.Intent
 import android.media.tv.TvInputInfo
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,9 +17,8 @@ import com.phoenix.phoenixplayer2.model.Portal
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class LoadFragment(private val selectedPortal:Portal): Fragment(), StateListener{
+class LoadFragment(private var selectedPortal:Portal): Fragment(), StateListener{
 
     private lateinit var binding: FragmentLoadingBinding
 
@@ -29,7 +29,7 @@ class LoadFragment(private val selectedPortal:Portal): Fragment(), StateListener
         val connectManager = ConnectManager(selectedPortal.serverUrl, selectedPortal.macAddress, selectedPortal.token)
         val inputId:String = getInputId()
         CoroutineScope(Dispatchers.IO).launch {
-            context?.let { context -> connectManager.insert(inputId, context, this@LoadFragment) }
+            context?.let { context -> connectManager.insert(inputId, context, selectedPortal,this@LoadFragment) }
         }
     }
 
@@ -53,9 +53,22 @@ class LoadFragment(private val selectedPortal:Portal): Fragment(), StateListener
         binding.loadingProgressText.text = "${percent}%"
     }
 
-    override fun onFinish() {
-        activity?.supportFragmentManager!!.popBackStack()
+    override suspend fun onConnect(portal: Portal) {
+        (activity as MainActivity).getRepository().update(portal)
+        selectedPortal = portal
+    }
+
+    override fun onStop() {
+        super.onStop()
         binding.loadingCircle.clearAnimation()
+
+    }
+
+    override fun onFinish() {
+        val intent = Intent(context, TvActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.putExtra(Portal.PORTAL_INTENT_TAG, selectedPortal)
+        startActivity(intent)
     }
 
 

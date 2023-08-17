@@ -1,5 +1,6 @@
 package com.phoenix.phoenixplayer2
 
+import android.media.tv.TableRequest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,6 +49,7 @@ class PortalEditFragment(private var portal: Portal? = null) : Fragment(){
         binding = FragmentEditBinding.inflate(inflater, container, false)
         setSpinners()
         setCheckBox()
+
         setButtons()
 
 

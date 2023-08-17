@@ -9,6 +9,10 @@ interface PortalDao {
     @Query("SELECT * FROM portals")
     fun getPortals(): LiveData<List<Portal>>
 
+    @Query("SELECT * FROM portals WHERE connected = 1")
+    suspend fun getConnectedPortal(): List<Portal>
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(portal: Portal)
 

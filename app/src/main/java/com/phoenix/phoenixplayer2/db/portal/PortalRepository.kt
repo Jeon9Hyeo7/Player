@@ -19,6 +19,10 @@ class PortalRepository(context: Context) {
         return portalDao.getPortals()
     }
 
+    suspend fun getConnectedPortal():List<Portal>{
+        return portalDao.getConnectedPortal()
+    }
+
     suspend fun update(portal: Portal) {
         portalDao.update(portal)
     }

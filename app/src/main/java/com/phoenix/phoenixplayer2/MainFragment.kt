@@ -1,7 +1,6 @@
 package com.phoenix.phoenixplayer2
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import androidx.leanback.widget.*
 import androidx.lifecycle.ViewModelProvider
 import com.phoenix.phoenixplayer2.model.Portal
 import com.phoenix.phoenixplayer2.view.PortalCardPresenter
-import com.phoenix.phoenixplayer2.view.PortalViewModel
+import com.phoenix.phoenixplayer2.viewmodel.PortalViewModel
 
 /**
  *

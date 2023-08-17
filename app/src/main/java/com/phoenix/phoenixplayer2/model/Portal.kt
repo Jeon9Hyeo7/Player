@@ -27,6 +27,10 @@ data class Portal(
     var connected: Boolean = false
 ) : Serializable{
 
+    companion object {
+        const val PORTAL_INTENT_TAG:String = "intent_portal"
+    }
+
     @PrimaryKey(autoGenerate = true)
     var id: Long= -1
 

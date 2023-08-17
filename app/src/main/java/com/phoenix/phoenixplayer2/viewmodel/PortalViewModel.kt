@@ -1,4 +1,4 @@
-package com.phoenix.phoenixplayer2.view
+package com.phoenix.phoenixplayer2.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
