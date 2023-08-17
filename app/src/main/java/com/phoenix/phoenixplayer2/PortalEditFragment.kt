@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.lib.api.ConnectManager
 import com.lib.api.DeviceManager
 import com.phoenix.phoenixplayer2.databinding.FragmentEditBinding
@@ -153,6 +155,12 @@ class PortalEditFragment(private var portal: Portal? = null) : Fragment(){
                     token = token,
                     exp_date = expDate
                 )
+                val insert = portal!!
+                (activity as MainActivity).getRepository().insert(insert)
+                withContext(Dispatchers.Main){
+                    (activity as MainActivity).supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                }
+
             }
             catch (e:Exception){
                 withContext(Dispatchers.Main){

@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.leanback.app.RowsSupportFragment
 import androidx.leanback.widget.*
 import androidx.lifecycle.ViewModelProvider
+import com.phoenix.phoenixplayer2.model.Portal
 import com.phoenix.phoenixplayer2.view.PortalCardPresenter
 import com.phoenix.phoenixplayer2.view.PortalViewModel
 
@@ -104,12 +105,14 @@ class MainFragment : RowsSupportFragment() , FragmentManager.OnBackStackChangedL
             if (item is String){
                 transaction.add(R.id.main_frame, PortalEditFragment()).addToBackStack(null).hide(this@MainFragment).commit()
             }
+            else if (item is Portal){
+                transaction.add(R.id.main_frame, PortalActionFragment(item)).addToBackStack(null).hide(this@MainFragment).commit()
+            }
         }
 
     }
 
     override fun onBackStackChanged() {
-        Log.d(TAG, "Changed!")
     }
 
 

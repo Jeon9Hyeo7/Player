@@ -19,4 +19,20 @@
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">san-serif-light</item>
     </style>
+    <style name="Style.FullScreen" parent="">
+
+    </style>
+
+
+    <style name="Style.FullScreen.Action" parent="Style.FullScreen">
+        <item name="android:layout_width">600dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:background">@drawable/action_shape</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#CDCDCD</item>
+        <item name="android:fontFamily">san-serif-medium</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
 </resources>
