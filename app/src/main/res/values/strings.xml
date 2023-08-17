@@ -27,5 +27,6 @@
     <string name="action_delete">Delete</string>
 
     <string name="loading">Loading…</string>
+    <string name="start_download">Downloading Data...</string>
 
 </resources>

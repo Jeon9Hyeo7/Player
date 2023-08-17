@@ -45,11 +45,11 @@ class PortalActionFragment(val portal: Portal? = null) : Fragment(){
         actionConnect = binding.actionConnect
         actionConnect.setOnClickListener{
             val selectedPortal = portal!!
-            val connectManager = ConnectManager(selectedPortal.serverUrl, selectedPortal.macAddress, selectedPortal.token)
-            CoroutineScope(Dispatchers.IO).launch {
-                val inputId:String = getInputId()
-                context?.let { context -> connectManager.insert(inputId, context, stateListener) }
-            }
+            activity?.supportFragmentManager!!
+                .beginTransaction().add(R.id.main_frame, LoadFragment(selectedPortal))
+                .addToBackStack(null)
+                .hide(this@PortalActionFragment).commit()
+
         }
         actionEdit = binding.actionEdit
         actionDelete = binding.actionDelete
@@ -57,14 +57,7 @@ class PortalActionFragment(val portal: Portal? = null) : Fragment(){
     }
 
 
-    private fun getInputId():String{
-        val componentName = context?.let {
-            ComponentName(it.packageName, InputService::class.java.name) }
-        val builder: TvInputInfo.Builder = TvInputInfo.Builder(context, componentName)
-        val tvInputInfo:TvInputInfo = builder.build()
-        val intent = tvInputInfo.createSetupIntent()
-        return intent.getStringExtra(TvInputInfo.EXTRA_INPUT_ID)!!
-    }
+
 
 
 
