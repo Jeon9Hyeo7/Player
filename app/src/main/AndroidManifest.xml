@@ -21,7 +21,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.PhoenixPlayer2">
         <activity
-            android:name="com.phoenix.phoenixplayer2.MainActivity"
+            android:name="com.phoenix.phoenixplayer2.components.MainActivity"
             android:banner="@drawable/app_icon_your_company"
             android:exported="true"
             android:icon="@drawable/app_icon_your_company"
@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".InputService"
+            android:name=".components.InputService"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_TV_INPUT"
             android:exported="true"
@@ -47,7 +47,7 @@
                 android:name="android.media.tv.input"
                 android:resource="@xml/tv_input" />
         </service>
-        <activity android:name=".TvActivity"
+        <activity android:name=".components.TvActivity"
             android:launchMode="singleTop"
             >
 

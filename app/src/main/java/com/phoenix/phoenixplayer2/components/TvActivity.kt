@@ -1,4 +1,4 @@
-package com.phoenix.phoenixplayer2
+package com.phoenix.phoenixplayer2.components
 
 import android.os.Bundle
 import android.os.PersistableBundle

@@ -1,9 +1,9 @@
-package com.phoenix.phoenixplayer2
+package com.phoenix.phoenixplayer2.components
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.FragmentActivity
+import com.phoenix.phoenixplayer2.R
 import com.phoenix.phoenixplayer2.db.portal.PortalRepository
 import com.phoenix.phoenixplayer2.model.Portal
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package com.phoenix.phoenixplayer2
+package com.phoenix.phoenixplayer2.components
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
+import com.phoenix.phoenixplayer2.R
 import com.phoenix.phoenixplayer2.api.ConnectManager
 import com.phoenix.phoenixplayer2.databinding.FragmentLoadingBinding
 import com.phoenix.phoenixplayer2.db.StateListener

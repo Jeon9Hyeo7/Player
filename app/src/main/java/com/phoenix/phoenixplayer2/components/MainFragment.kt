@@ -1,4 +1,4 @@
-package com.phoenix.phoenixplayer2
+package com.phoenix.phoenixplayer2.components
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.leanback.app.RowsSupportFragment
 import androidx.leanback.widget.*
 import androidx.lifecycle.ViewModelProvider
+import com.phoenix.phoenixplayer2.R
 import com.phoenix.phoenixplayer2.model.Portal
 import com.phoenix.phoenixplayer2.view.PortalCardPresenter
 import com.phoenix.phoenixplayer2.viewmodel.PortalViewModel

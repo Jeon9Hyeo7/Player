@@ -1,4 +1,4 @@
-package com.phoenix.phoenixplayer2
+package com.phoenix.phoenixplayer2.components
 
 import android.content.Context
 import android.media.tv.TvInputService
