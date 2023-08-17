@@ -11,20 +11,20 @@ import java.io.Serializable
 
 @Entity(tableName = "portals")
 data class Portal(
-    val title: String = "",
-    val url: String = "",
-    val log_req: Boolean = false,
-    val user_ID: String = "",
-    val user_PW: String = "",
-    val EPG_MODE: EPGMode = EPGMode.Normal,
-    val EPG_OFFSET: EPGOffset = EPGOffset.Under000,
-    val MAC_TYPE: MacType = MacType.Default,
-    val macAddress: String = "",
-    val group_Numbering: GroupChannelNumbering = GroupChannelNumbering.Off,
-    val exp_date: String = "",
-    val token: String = "",
-    val serverUrl: String = "",
-    val connected: Boolean = false
+    var title: String = "",
+    var url: String = "",
+    var log_req: Boolean = false,
+    var user_ID: String = "",
+    var user_PW: String = "",
+    var EPG_MODE: EPGMode = EPGMode.Normal,
+    var EPG_OFFSET: EPGOffset = EPGOffset.Under000,
+    var MAC_TYPE: MacType = MacType.Default,
+    var macAddress: String = "",
+    var group_Numbering: GroupChannelNumbering = GroupChannelNumbering.Off,
+    var exp_date: String = "",
+    var token: String = "",
+    var serverUrl: String = "",
+    var connected: Boolean = false
 ) : Serializable{
 
     @PrimaryKey(autoGenerate = true)

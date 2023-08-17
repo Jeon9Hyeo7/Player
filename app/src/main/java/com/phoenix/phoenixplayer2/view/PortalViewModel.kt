@@ -1,10 +1,8 @@
 package com.phoenix.phoenixplayer2.view
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.phoenix.phoenixplayer2.db.PortalRepository
 import com.phoenix.phoenixplayer2.model.Portal
 
 class PortalViewModel: ViewModel() {

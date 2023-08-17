@@ -1,4 +1,4 @@
-package com.phoenix.phoenixplayer2.db
+package com.phoenix.phoenixplayer2.db.portal
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

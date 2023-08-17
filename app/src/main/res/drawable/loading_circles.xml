@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Loading Circle 1 -->
+    <path
+        android:fillColor="#ff297e"
+        android:pathData="M 50,100 m -18,-18a 18,18 0 1,1 36,0a 18,18 0 1,1 -36,0" >
+    </path>
+
+    <!-- Loading Circle 2 -->
+    <path
+        android:fillColor="#ff297e"
+        android:pathData="M 82,36 m -18,-18a 18,18 0 1,1 36,0a 18,18 0 1,1 -36,0" />
+
+    <!-- Loading Circle 3 -->
+    <path
+        android:fillColor="#ff297e"
+        android:pathData="M 18,36 m -18,-18a 18,18 0 1,1 36,0a 18,18 0 1,1 -36,0" />
+</vector>

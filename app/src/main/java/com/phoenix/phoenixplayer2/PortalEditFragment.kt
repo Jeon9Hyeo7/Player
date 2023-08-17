@@ -1,9 +1,6 @@
 package com.phoenix.phoenixplayer2
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -14,9 +11,8 @@ import android.widget.CheckBox
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import com.lib.api.ConnectManager
-import com.lib.api.DeviceManager
+import com.phoenix.phoenixplayer2.api.ConnectManager
+import com.phoenix.phoenixplayer2.api.DeviceManager
 import com.phoenix.phoenixplayer2.databinding.FragmentEditBinding
 import com.phoenix.phoenixplayer2.model.Portal
 import com.phoenix.phoenixplayer2.model.enums.EPGMode
@@ -27,7 +23,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.NullPointerException
 
 class PortalEditFragment(private var portal: Portal? = null) : Fragment(){
 

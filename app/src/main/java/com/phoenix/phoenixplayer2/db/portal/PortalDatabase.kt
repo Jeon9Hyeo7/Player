@@ -1,4 +1,4 @@
-package com.phoenix.phoenixplayer2.db
+package com.phoenix.phoenixplayer2.db.portal
 
 import android.content.Context
 import androidx.room.Database

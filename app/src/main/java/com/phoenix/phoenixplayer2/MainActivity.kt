@@ -1,20 +1,8 @@
 package com.phoenix.phoenixplayer2
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LifecycleOwner
-import com.phoenix.phoenixplayer2.db.PortalRepository
-import com.phoenix.phoenixplayer2.model.Portal
-import com.phoenix.phoenixplayer2.model.enums.EPGMode
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.jetbrains.annotations.TestOnly
-import kotlin.coroutines.CoroutineContext
+import com.phoenix.phoenixplayer2.db.portal.PortalRepository
 
 /**
  * Loads [MainFragment].
@@ -36,7 +24,7 @@ class MainActivity : FragmentActivity() {
                 .commitNow()
         }
     }
-    fun getRepository(): PortalRepository{
+    fun getRepository(): PortalRepository {
         return repository
     }
 
