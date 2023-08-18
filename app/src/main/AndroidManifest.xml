@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA"/>
-
+    <uses-permission android:name="com.android.providers.tv.permission.ACCESS_ALL_EPG_DATA"/>
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".components.InputService"
+            android:name=".InputService"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_TV_INPUT"
             android:exported="true"

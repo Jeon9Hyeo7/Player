@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
+import com.phoenix.phoenixplayer2.InputService
 import com.phoenix.phoenixplayer2.R
 import com.phoenix.phoenixplayer2.api.ConnectManager
 import com.phoenix.phoenixplayer2.databinding.FragmentLoadingBinding
@@ -26,7 +27,6 @@ class LoadFragment(private var selectedPortal:Portal): Fragment(), StateListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.loadingCircle.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate))
-
         val connectManager = ConnectManager(selectedPortal.serverUrl, selectedPortal.macAddress, selectedPortal.token)
         val inputId:String = getInputId()
         CoroutineScope(Dispatchers.IO).launch {

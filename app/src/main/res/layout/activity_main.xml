@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_frame"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".components.MainActivity"
-    tools:deviceIds="tv"
-    tools:ignore="MergeRootFrame">
-
+    >
     <FrameLayout
-        android:id="@+id/portal_fragment"
+        android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:context=".components.MainActivity"
+        tools:deviceIds="tv"
+        tools:ignore="MergeRootFrame">
 
-        />
-</FrameLayout>
+        <FrameLayout
+            android:id="@+id/portal_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            />
+    </FrameLayout>
+
+</layout>

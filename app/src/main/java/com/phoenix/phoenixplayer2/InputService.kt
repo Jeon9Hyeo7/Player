@@ -1,11 +1,18 @@
-package com.phoenix.phoenixplayer2.components
+package com.phoenix.phoenixplayer2
 
 import android.content.Context
 import android.media.tv.TvInputService
 import android.net.Uri
 import android.view.Surface
+import com.phoenix.phoenixplayer2.db.tv.TvRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class InputService : TvInputService(){
+
+    private val mRepository:TvRepository = TvRepository(this)
+
     override fun onCreateSession(inputId: String): Session? {
         val session = InputSession(this)
         session.setOverlayViewEnabled(true)
@@ -14,6 +21,8 @@ class InputService : TvInputService(){
 
 
     inner class InputSession(context: Context?) : TvInputService.Session(context){
+
+
         override fun onRelease() {
 
         }
@@ -26,6 +35,11 @@ class InputService : TvInputService(){
         }
 
         override fun onTune(channelUri: Uri?): Boolean {
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val channel = mRepository.getChannel(channelUri!!)
+            }
+
             return true
         }
 

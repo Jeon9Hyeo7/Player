@@ -1,8 +1,10 @@
 package com.phoenix.phoenixplayer2.model
 
 import android.content.ContentValues
+import android.database.Cursor
 import android.media.tv.TvContract
 import android.net.Uri
+import android.util.Log
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -10,26 +12,84 @@ data class Channel(
     var id: Long? = -1,
     var displayName: String,
     var displayNumber: String,
-    var inputId: String,
-    var packageName: String,
-    var originalNetworkId: Long,
-    var internalProviderData: InternalProviderData
+    var inputId: String? = "null",
+    var packageName: String?= "com.phoenix.phoenixplayer2",
+    var originalNetworkId: Long? = -1,
+    var internalProviderData: InternalProviderData? = null
 ){
 
+    companion object{
+        val projection:Array<String> = arrayOf(
+            TvContract.Channels._ID,
+            TvContract.Channels.COLUMN_DISPLAY_NAME,
+            TvContract.Channels.COLUMN_DISPLAY_NUMBER,
+            TvContract.Channels.COLUMN_INPUT_ID,
+            TvContract.Channels.COLUMN_PACKAGE_NAME,
+            TvContract.Channels.COLUMN_ORIGINAL_NETWORK_ID,
+            TvContract.Channels.COLUMN_INTERNAL_PROVIDER_DATA
+        )
 
-    fun getUri(): Uri{
+        fun fromCursor(cursor: Cursor): Channel {
+            var index = 0
+            var id: Long? = -1
+            var displayName: String? = "N/A"
+            var displayNumber: String? = "N/A"
+            var inputId: String? = "N/A"
+            var packageName: String? = "N/A"
+            var originalNetworkId: Long? = -1
+            var internalProviderData: ByteArray? = null
+            if (!cursor.isNull(index)) {
+                id = cursor.getLong(index)
+            }
+            if (!cursor.isNull(++index)) {
+                displayName = cursor.getString(index)
+            }
+            if (!cursor.isNull(++index)) {
+                displayNumber = cursor.getString(index)
+            }
+            if (!cursor.isNull(++index)) {
+                inputId = cursor.getString(index)
+            }
+            if (!cursor.isNull(++index)) {
+                packageName = cursor.getString(index)
+            }
+            if (!cursor.isNull(++index)) {
+                originalNetworkId = cursor.getLong(index)
+            }
+            if (!cursor.isNull(++index)) {
+                internalProviderData = cursor.getBlob(index)
+            }
+
+            return Channel(
+                id, displayName!!, displayNumber!!, inputId!!, packageName!!,
+                originalNetworkId!!, InternalProviderData(internalProviderData)
+            )
+
+        }
+    }
+
+
+    fun getUri(): Uri?{
         return TvContract.buildChannelUri(id!!)
     }
+    fun getLogo(): String? {
+        if (internalProviderData == null){
+            return null
+        }
+        return internalProviderData!!.getLogo()
+    }
 
-    fun getGenreId():String{
-        return internalProviderData.getGenreId()!!
+    fun getGenreId():String?{
+        return internalProviderData!!.getGenreId()!!
     }
     fun getVideoUrl():String{
-        return internalProviderData.getVideoUrl()!!
+        return internalProviderData!!.getVideoUrl()!!
     }
     fun getVideoType():Int{
-        return internalProviderData.getVideoType()!!
+        return internalProviderData!!.getVideoType()!!
     }
+
+
 
 
 
