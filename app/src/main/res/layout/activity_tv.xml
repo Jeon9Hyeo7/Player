@@ -11,13 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <com.phoenix.phoenixplayer2.view.TunableTvView
+        <android.media.tv.TvView
             android:id="@+id/tv_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            />
 
         <androidx.fragment.app.FragmentContainerView
-            android:id = "@+id/banner_container"
+            android:id ="@+id/banner_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/tv_view"

@@ -10,15 +10,13 @@ import com.phoenix.phoenixplayer2.model.Category
 import com.phoenix.phoenixplayer2.model.Channel
 import kotlinx.coroutines.launch
 
-class TvViewModel(val repository: TvRepository) : ViewModel() {
+class TvViewModel() : ViewModel() {
 
 
     companion object {
         private const val TAG: String = "TvViewModel"
     }
 
-    private val channelList: LiveData<List<Channel>> = repository.getAllChannels()
-    private val groupedList: MutableLiveData<List<Channel>> = MutableLiveData()
 
 
     private val channel = MutableLiveData<Channel>()
@@ -28,24 +26,17 @@ class TvViewModel(val repository: TvRepository) : ViewModel() {
 
     val currentChannel: LiveData<Channel>
         get() {
-
            return channel
         }
 
 
+
     init {
-
-    }
-    fun group(genreId: String){
-        viewModelScope.launch {
-            val group = channelList.value?.filter {
-                it.getGenreId() == genreId
-            } ?: emptyList()
-            groupedList.value = group
-        }
+        this.channel.value = Channel()
     }
 
-    fun tune(channel: Channel){
+
+    fun set(channel: Channel){
         this.channel.value = channel
     }
 

@@ -10,8 +10,8 @@ import org.json.JSONObject
 
 data class Channel(
     var id: Long? = -1,
-    var displayName: String,
-    var displayNumber: String,
+    var displayName: String? = "N/A",
+    var displayNumber: String? = "-1",
     var inputId: String? = "null",
     var packageName: String?= "com.phoenix.phoenixplayer2",
     var originalNetworkId: Long? = -1,
@@ -19,6 +19,8 @@ data class Channel(
 ){
 
     companion object{
+        const val INVALID_CHANNEL_ID = -1
+
         val projection:Array<String> = arrayOf(
             TvContract.Channels._ID,
             TvContract.Channels.COLUMN_DISPLAY_NAME,

@@ -10,11 +10,5 @@ class TunableTvView(context: Context?, attrs: AttributeSet?)
     : TvView(context, attrs) {
 
         lateinit var viewModel:TvViewModel
-        fun setModel(owner: LifecycleOwner, viewModel: TvViewModel){
-            this.viewModel = viewModel
-            viewModel.currentChannel.observe(owner) {
-                tune(it.inputId!!, it.getUri())
-            }
-        }
 
 }
