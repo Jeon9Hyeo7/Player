@@ -19,7 +19,7 @@ data class Channel(
 ){
 
     companion object{
-        const val INVALID_CHANNEL_ID = -1
+        const val INVALID_CHANNEL_ID: Long = -1
 
         val projection:Array<String> = arrayOf(
             TvContract.Channels._ID,

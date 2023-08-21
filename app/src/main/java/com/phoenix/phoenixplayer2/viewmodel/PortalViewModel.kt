@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.phoenix.phoenixplayer2.model.Portal
 
 class PortalViewModel: ViewModel() {
+
     companion object {
         private const val TAG: String = "PortalViewModel"
     }

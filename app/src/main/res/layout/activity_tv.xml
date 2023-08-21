@@ -8,6 +8,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tv_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -16,7 +17,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
+        <androidx.fragment.app.FragmentContainerView
+            android:id = "@+id/category_container"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-100dp"
+            app:layout_constraintEnd_toStartOf="parent"
 
+            />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id = "@+id/channel_container"
+            android:layout_width="400dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-100dp"
+            app:layout_constraintStart_toEndOf="@id/category_container"
+            />
         <androidx.fragment.app.FragmentContainerView
             android:id ="@+id/banner_container"
             android:layout_width="0dp"

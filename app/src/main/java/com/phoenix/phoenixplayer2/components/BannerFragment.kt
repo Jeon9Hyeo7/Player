@@ -55,6 +55,8 @@ class BannerFragment: Fragment() {
 
 
     private fun updateBanner(channel: Channel) {
+        val sfm = mRootActivity.supportFragmentManager
+
         bannerAnimationHandler.removeCallbacksAndMessages(null)
         binding.channelName.text = channel.displayName
         binding.channelNumber.text = channel.displayNumber
@@ -69,9 +71,7 @@ class BannerFragment: Fragment() {
         if (map.isNotEmpty()){
             binding.channelGroup.text = map[channel.getGenreId()]!!.title
         }
-        val sfm = mRootActivity.supportFragmentManager
-        sfm.beginTransaction().show(this@BannerFragment)
-            .addToBackStack(null).commit()
+        sfm.beginTransaction().show(this@BannerFragment).commit()
 
         bannerAnimationHandler.postDelayed({
             sfm.beginTransaction().hide(this@BannerFragment).commit()

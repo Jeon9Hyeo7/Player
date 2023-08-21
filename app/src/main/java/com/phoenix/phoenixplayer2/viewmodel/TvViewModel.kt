@@ -36,7 +36,7 @@ class TvViewModel() : ViewModel() {
     }
 
 
-    fun set(channel: Channel){
+    fun update(channel: Channel){
         this.channel.value = channel
     }
 

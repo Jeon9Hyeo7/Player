@@ -9,6 +9,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/default_background.xml" value="0.176" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/edit_button_shape.xml" value="0.176" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/edit_text_shape.xml" value="0.176" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/list_item_default.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/loading.xml" value="0.125" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/portal_cardview_background.xml" value="0.176" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/portal_connected_item_drawable.xml" value="0.176" />
@@ -22,6 +23,8 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_banner.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_edit.xml" value="0.18" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_loading.xml" value="0.2" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/item_category.xml" value="0.1" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/item_channel_list.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/item_portal.xml" value="0.309375" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/portal_cardview_binding.xml" value="0.26458333333333334" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/spinner_textview.xml" value="0.1" />
