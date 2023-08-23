@@ -3,11 +3,14 @@ package com.phoenix.phoenixplayer2.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
+import androidx.leanback.widget.PresenterSelector
 import com.phoenix.phoenixplayer2.databinding.ItemCategoryBinding
 import com.phoenix.phoenixplayer2.databinding.ItemChannelListBinding
 import com.phoenix.phoenixplayer2.model.Category
+import com.phoenix.phoenixplayer2.model.VodCategory
 
 class CategoryPresenter: Presenter() {
+
     override fun onCreateViewHolder(parent: ViewGroup?): ViewHolder {
         val inflater = LayoutInflater.from(parent?.context)
         val binding = ItemCategoryBinding.inflate(inflater, parent, false)
@@ -24,13 +27,18 @@ class CategoryPresenter: Presenter() {
 
     }
 
+
     inner class CategoryViewHolder(private val binding:ItemCategoryBinding)
-        :ViewHolder(binding.root){
-            fun onBind(item: Any?){
-                if (item is Category){
-                    binding.categoryText.text = item.title
-                }
+        : Presenter.ViewHolder(binding.root){
+        fun onBind(item: Any?){
+            if (item is Category){
+                binding.categoryText.text = item.title
             }
+            else if (item is VodCategory){
+                binding.categoryText.text = item.categoryStr
+            }
+        }
     }
+
 
 }

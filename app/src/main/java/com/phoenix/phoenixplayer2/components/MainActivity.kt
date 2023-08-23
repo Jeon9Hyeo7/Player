@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.phoenix.phoenixplayer2.R
 import com.phoenix.phoenixplayer2.db.portal.PortalRepository
+import com.phoenix.phoenixplayer2.model.Menu
 import com.phoenix.phoenixplayer2.model.Portal
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +25,9 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         repository = PortalRepository(this)
-        findHistory()
+        if (intent.getStringExtra(Menu.TAG_PORTAL) == null){
+            findHistory()
+        }
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.portal_fragment, MainFragment())

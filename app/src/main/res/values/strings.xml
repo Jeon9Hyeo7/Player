@@ -31,4 +31,19 @@
     <!--Tv-->
     <string name="no_information">No Information</string>
 
+    <!--Menu-->
+    <string name="live_tv">Live TV</string>
+    <string name="vod">VOD</string>
+    <string name="tv_series">TV Series</string>
+    <string name="recordings">Recordings</string>
+    <string name="schedules">Schedule</string>
+    <string name="portal">Portal</string>
+    <string name="setting">Settings</string>
+    <string name="exit_text_1">Exit</string>
+    <string name="exit_text_2">Are you sure you want to exit?</string>
+
+    <!--VOD-->
+    <string name="tmdb_server">"https://api.themoviedb.org/3/"</string>
+
+
 </resources>

@@ -1,10 +1,13 @@
 package com.phoenix.phoenixplayer2.components
 
+import android.media.tv.TvTrackInfo
+import android.media.tv.TvView
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.lib.leanback.SingleLineVerticalFragment
 import com.phoenix.phoenixplayer2.R
@@ -15,6 +18,7 @@ import com.phoenix.phoenixplayer2.model.Category
 import com.phoenix.phoenixplayer2.model.Channel
 import com.phoenix.phoenixplayer2.model.Portal
 import com.phoenix.phoenixplayer2.model.Profile
+import com.phoenix.phoenixplayer2.model.enums.VideoResolution
 import com.phoenix.phoenixplayer2.viewmodel.ListViewModel
 import com.phoenix.phoenixplayer2.viewmodel.TvViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +31,8 @@ class TvActivity : FragmentActivity() {
     private lateinit var binding: ActivityTvBinding
     private var mSetupEnd = false
 
+    private lateinit var mConnectedPortal: Portal
+    private lateinit var mConnectManager: ConnectManager
     lateinit var viewModel:TvViewModel
     lateinit var listViewModel: ListViewModel
     private lateinit var mBannerFragment: BannerFragment
@@ -38,6 +44,7 @@ class TvActivity : FragmentActivity() {
     private lateinit var mRepository: TvRepository
     private var mCurrentChannel: Channel? = null
     private var mCurrentGroupId: String? = "*"
+    private var menuFragment: MenuFragment? = null
 
 
 
@@ -50,12 +57,14 @@ class TvActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_tv)
+        binding.tvView.setCallback(TvCallback())
        /* binding.tvView.setOnClickListener{
-            supportFragmentManager.beginTransaction().show(mChannelListFragment).addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().show(mChannelListFragment).replaceToBackStack(null).commit()
         }*/
 
         setObserver()
         val connectedPortal = intent.getSerializableExtra(Portal.PORTAL_INTENT_TAG) as Portal
+        mConnectedPortal = connectedPortal
         CoroutineScope(Dispatchers.IO).launch {
             setupTv(connectedPortal)
         }
@@ -63,12 +72,12 @@ class TvActivity : FragmentActivity() {
     }
 
     private suspend fun setupTv(connectedPortal:Portal){
-        val connectManager = ConnectManager(connectedPortal.serverUrl,
+        mConnectManager = ConnectManager(connectedPortal.serverUrl,
             connectedPortal.macAddress, connectedPortal.token)
-        mProfile = connectManager.getProfile()
+        mProfile = mConnectManager.getProfile()
         val lastItvId = mProfile.lastItvId
         mRepository = TvRepository(this, lastItvId)
-        mCategoryMap = connectManager.getCategories()
+        mCategoryMap = mConnectManager.getCategories()
         mChannelsMap = mRepository.getChannelsMap()
         val lastChannel = mRepository.getLastChannel()!!
         withContext(Dispatchers.Main){
@@ -76,11 +85,11 @@ class TvActivity : FragmentActivity() {
             mChannelListFragment = ChannelListFragment()
             mCategoryFragment = CategoryFragment()
             supportFragmentManager.beginTransaction()
-                .add(R.id.banner_container, mBannerFragment)
+                .replace(R.id.banner_container, mBannerFragment)
                 .hide(mBannerFragment)
-                .add(R.id.channel_container, mChannelListFragment)
+                .replace(R.id.channel_container, mChannelListFragment)
                 .hide(mChannelListFragment)
-                .add(R.id.category_container, mCategoryFragment)
+                .replace(R.id.category_container, mCategoryFragment)
                 .hide(mCategoryFragment)
                 .commit()
             mCategoryFragment.setCategories(mCategoryMap.values.toList())
@@ -116,12 +125,40 @@ class TvActivity : FragmentActivity() {
             else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
                 onClickDPadRight()
             }
+            else if (keyCode == KeyEvent.KEYCODE_INFO){
+                onClickInfo()
+            }
+            else if (keyCode == KeyEvent.KEYCODE_MENU){
+                onClickMenu()
+            }
+            else if (keyCode == KeyEvent.KEYCODE_BACK){
+                if (supportFragmentManager.backStackEntryCount == 0){
+                    return true
+                }
+            }
         }
 
         return super.onKeyUp(keyCode, event)
     }
 
+    private fun onClickMenu() {
+        val fragmentManager = supportFragmentManager
+        val existingFragment = fragmentManager.findFragmentById(R.id.tv_root)
+        if (existingFragment !is MenuFragment) {
+            val transaction = fragmentManager.beginTransaction()
+            if (menuFragment == null) {
+                menuFragment = MenuFragment(mConnectedPortal)
+            }
+            transaction.replace(R.id.tv_root, menuFragment!!)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
 
+    override fun onStart() {
+        super.onStart()
+//        tune()
+    }
 
     private fun keyDownChannel(keyCode:Int){
         val channel: Channel = if(keyCode == KeyEvent.KEYCODE_CHANNEL_UP){
@@ -138,6 +175,9 @@ class TvActivity : FragmentActivity() {
         val groupId = channel.getGenreId()!!
         binding.tvView.tune(inputId, channel.getUri())
         listViewModel.set(groupId)
+        CoroutineScope(Dispatchers.IO).launch {
+            mConnectManager.setLastId(channel.originalNetworkId!!)
+        }
     }
 
 
@@ -167,10 +207,18 @@ class TvActivity : FragmentActivity() {
     private fun onClickDPadCenter(){
         val backStackEntryCount = supportFragmentManager.backStackEntryCount
         val index = mChannelsMap[mCurrentGroupId]!!.indexOf(mCurrentChannel!!)
+
+        if (!mBannerFragment.isHidden){
+            supportFragmentManager.beginTransaction().hide(mBannerFragment).commit()
+        }
+
         if (backStackEntryCount == 0){
             mChannelListFragment.show(index, SingleLineVerticalFragment.CHANNEL_LIST_BACKSTACK)
         }
+
     }
+
+
 
     private fun onClickDPadLeft(){
         if (supportFragmentManager.backStackEntryCount == 1){
@@ -184,6 +232,17 @@ class TvActivity : FragmentActivity() {
         popCategory()
     }
 
+    private fun onClickInfo() {
+        val transaction = supportFragmentManager.beginTransaction()
+        if (!mBannerFragment.isHidden){
+           transaction.hide(mBannerFragment)
+        }
+        else{
+            transaction.show(mBannerFragment)
+        }
+        transaction.commit()
+    }
+
 
     fun popCategory(){
         if (supportFragmentManager.backStackEntryCount == 2){
@@ -192,10 +251,47 @@ class TvActivity : FragmentActivity() {
                 supportFragmentManager.popBackStack()
             }
         }
-
     }
+
+
     fun getChannelListInstance(): Channel {
         return mChannelListFragment.mSelectedChannel
+    }
+
+    inner class TvCallback : TvView.TvInputCallback(){
+
+        override fun onTracksChanged(inputId: String?, tracks: MutableList<TvTrackInfo>?) {
+            super.onTracksChanged(inputId, tracks)
+            setVideo(tracks!!)
+        }
+
+        private fun setVideo(tracks: MutableList<TvTrackInfo>){
+            CoroutineScope(Dispatchers.IO).launch {
+                var videoInfo: TvTrackInfo? = null
+                for (trackInfo in tracks) {
+                    if (trackInfo.type == TvTrackInfo.TYPE_VIDEO) {
+                        videoInfo = trackInfo
+                    }
+                }
+                var videoResolution: VideoResolution? = null
+                if (videoInfo != null) {
+                    val videoWidth = videoInfo.videoWidth
+                    val videoHeight = videoInfo.videoHeight
+                    for (resolution in VideoResolution.values()) {
+                        if (videoWidth == resolution.width && videoHeight == resolution.height) {
+                            videoResolution = resolution
+                            break
+                        }
+                    }
+                }
+                if (videoResolution == null) {
+                    videoResolution = VideoResolution.SD
+                }
+                withContext(Dispatchers.Main){
+                    viewModel.setResolution(videoResolution)
+                }
+            }
+        }
     }
 
 }

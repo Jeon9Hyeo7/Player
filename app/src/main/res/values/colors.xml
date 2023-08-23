@@ -6,4 +6,8 @@
     <color name="selected_background">#ffaa3f</color>
     <color name="default_background">#3d3d3d</color>
     <color name="color_theme_phoenix">#E6FF96B4</color>
+    <color name="phoenix">#ff297e</color>
+
+    <color name="red_gray">#C0AFB4</color>
+
 </resources>

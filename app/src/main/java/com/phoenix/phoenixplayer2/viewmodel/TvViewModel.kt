@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.phoenix.phoenixplayer2.db.tv.TvRepository
 import com.phoenix.phoenixplayer2.model.Category
 import com.phoenix.phoenixplayer2.model.Channel
+import com.phoenix.phoenixplayer2.model.enums.VideoResolution
 import kotlinx.coroutines.launch
 
 class TvViewModel() : ViewModel() {
@@ -20,6 +21,7 @@ class TvViewModel() : ViewModel() {
 
 
     private val channel = MutableLiveData<Channel>()
+    private val resolution = MutableLiveData<VideoResolution>()
 
 
 
@@ -29,15 +31,23 @@ class TvViewModel() : ViewModel() {
            return channel
         }
 
-
+    val currentVideoResolution: LiveData<VideoResolution>
+        get() {
+            return resolution
+        }
 
     init {
         this.channel.value = Channel()
+        this.resolution.value = VideoResolution.NONE
     }
 
 
     fun update(channel: Channel){
         this.channel.value = channel
+    }
+
+    fun setResolution(resolution: VideoResolution){
+        this.resolution.value = resolution
     }
 
 

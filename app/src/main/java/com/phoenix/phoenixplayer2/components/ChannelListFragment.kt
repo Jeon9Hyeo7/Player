@@ -100,12 +100,12 @@ class ChannelListFragment()
          * */
 
         mChannelsViewModel.forCategoryData.observe(viewLifecycleOwner){
-            CoroutineScope(Dispatchers.IO).launch {
-                mUpdateHandler.removeCallbacksAndMessages(null)
-                if (mChannelsAdapter.size() > 0){
-                    mChannelsAdapter.clear()
-                }
-                val newList = repository.getGroup(it)
+            mUpdateHandler.removeCallbacksAndMessages(null)
+            if (mChannelsAdapter.size() > 0){
+                mChannelsAdapter.clear()
+            }
+            val newList = repository.getGroup(it)
+            if (newList != null){
                 mUpdateHandler.postDelayed({
                     mChannelsAdapter.addAll(0, newList)
                 }, 550)

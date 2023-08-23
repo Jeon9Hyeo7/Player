@@ -1,11 +1,14 @@
 package com.phoenix.phoenixplayer2.components
 
+import android.media.tv.TvView
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -13,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.phoenix.phoenixplayer2.R
 import com.phoenix.phoenixplayer2.databinding.FragmentBannerBinding
 import com.phoenix.phoenixplayer2.model.Channel
+import com.phoenix.phoenixplayer2.model.enums.VideoResolution
 import com.phoenix.phoenixplayer2.viewmodel.TvViewModel
 
 class BannerFragment: Fragment() {
@@ -24,6 +28,7 @@ class BannerFragment: Fragment() {
     companion object {
         private const val TAG = "BannerFragment"
         private const val INVALID_NUMBER = "-1"
+        const val BANNER_IN_BACKSTACK = "banner_in_backstack"
     }
 
     private val bannerAnimationHandler: Handler = Handler(Looper.getMainLooper())
@@ -41,9 +46,19 @@ class BannerFragment: Fragment() {
         binding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_banner, container, false)
         binding.viewModel = mRootActivity.viewModel
-        (binding.viewModel as TvViewModel).currentChannel.observe(viewLifecycleOwner){
+        val tvViewModel = binding.viewModel as TvViewModel
+        tvViewModel.currentChannel.observe(viewLifecycleOwner){
             if (it.displayNumber != INVALID_NUMBER){
                 updateBanner(it)
+            }
+        }
+        tvViewModel.currentVideoResolution.observe(viewLifecycleOwner){
+            if (it == VideoResolution.NONE){
+                binding.videoType.visibility = GONE
+            }
+            else {
+                binding.videoType.visibility = VISIBLE
+                binding.videoType.text = it.name
             }
         }
 
@@ -51,8 +66,10 @@ class BannerFragment: Fragment() {
     }
 
 
-
-
+    override fun onStop() {
+        super.onStop()
+        bannerAnimationHandler.removeCallbacksAndMessages(null)
+    }
 
     private fun updateBanner(channel: Channel) {
         val sfm = mRootActivity.supportFragmentManager
