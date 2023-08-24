@@ -1,18 +1,20 @@
 package com.phoenix.phoenixplayer2.db.tv
 
+import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.media.tv.TvContract
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import com.phoenix.phoenixplayer2.model.Channel
+import com.phoenix.phoenixplayer2.model.Program
 
 class TvRepository(val context: Context, private val lastChannelId: Long? = -1) {
     private var mChannelsMap:Map<String, List<Channel>>
     private var mLastChannel:Channel?
 
     init {
+
         val allList:MutableMap<String, MutableList<Channel>> = mutableMapOf()
         val cursor = context.contentResolver.query(TvContract.Channels.CONTENT_URI,
             Channel.projection, null, null, null)
@@ -48,6 +50,46 @@ class TvRepository(val context: Context, private val lastChannelId: Long? = -1) 
                 cursor?.close()
             }
         }
+        fun getPrograms(resolver: ContentResolver, channelUri: Uri?): List<Program>? {
+            if (channelUri == null) {
+                return null
+            }
+            val uri = TvContract.buildProgramsUriForChannel(channelUri)
+            val programs: MutableList<Program> = ArrayList<Program>()
+            // TvProvider returns programs in chronological order by default.
+            var cursor: Cursor? = null
+            try {
+                cursor = resolver.query(uri, Program.PROJECTION, null, null, null)
+                if (cursor == null || cursor.count == 0) {
+                    return programs
+                }
+                while (cursor.moveToNext()) {
+                    val program: Program = Program.fromCursor(cursor)
+                    programs.add(program)
+
+                    /*if (programs.size > 0) {
+                        val last: Program = programs[programs.size - 1]
+                        if (!(last.title.equals(program.getTitle()) &&
+                                    (last.getStartTimestamp() === program.getStartTimestamp() ||
+                                            last.getEndTimestamp() === program.getEndTimestamp()))
+                        ) {
+                            programs.add(program)
+                        }
+                    } else {
+                        programs.add(program)
+                    }*/
+                }
+            } catch (e: java.lang.Exception) {
+                Log.w(
+                    "TAG",
+                    "Unable to get programs for $channelUri", e
+                )
+            } finally {
+                cursor?.close()
+            }
+            return programs
+        }
+
     }
 
     fun getLastChannel():Channel?{
@@ -86,21 +128,7 @@ class TvRepository(val context: Context, private val lastChannelId: Long? = -1) 
 
 
 
-    fun getAllChannels(): LiveData<List<Channel>> {
-        val allList: MutableList<Channel> = mutableListOf()
-        val allChannelsLiveData = MutableLiveData<List<Channel>>() // LiveData 생성
-        val cursor = context.contentResolver.query(
-            TvContract.Channels.CONTENT_URI,
-            Channel.projection, null, null, null
-        )
 
-        while (cursor?.moveToNext() == true) {
-            val channel = Channel.fromCursor(cursor)
-            allList.add(channel)
-        }
 
-        allChannelsLiveData.value = allList
-        return allChannelsLiveData
-    }
 
 }

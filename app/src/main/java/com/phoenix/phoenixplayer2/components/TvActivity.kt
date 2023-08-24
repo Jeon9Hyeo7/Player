@@ -1,18 +1,27 @@
 package com.phoenix.phoenixplayer2.components
 
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
+import android.media.tv.TvContract
 import android.media.tv.TvTrackInfo
 import android.media.tv.TvView
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.util.Log
 import android.view.KeyEvent
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.lib.leanback.SingleLineVerticalFragment
 import com.phoenix.phoenixplayer2.R
 import com.phoenix.phoenixplayer2.api.ConnectManager
+import com.phoenix.phoenixplayer2.api.TimeUtils
+import com.phoenix.phoenixplayer2.api.TimeUtils.Companion.calculateTimeDifferenceInMillis
 import com.phoenix.phoenixplayer2.databinding.ActivityTvBinding
+import com.phoenix.phoenixplayer2.db.tv.ProgramSyncService
 import com.phoenix.phoenixplayer2.db.tv.TvRepository
 import com.phoenix.phoenixplayer2.model.Category
 import com.phoenix.phoenixplayer2.model.Channel
@@ -25,12 +34,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.threeten.bp.ZoneId
 
 class TvActivity : FragmentActivity() {
 
     private lateinit var binding: ActivityTvBinding
     private var mSetupEnd = false
-
+    private val backgroundScope = CoroutineScope(Dispatchers.IO)
     private lateinit var mConnectedPortal: Portal
     private lateinit var mConnectManager: ConnectManager
     lateinit var viewModel:TvViewModel
@@ -56,16 +66,17 @@ class TvActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidThreeTen.init(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_tv)
         binding.tvView.setCallback(TvCallback())
-       /* binding.tvView.setOnClickListener{
-            supportFragmentManager.beginTransaction().show(mChannelListFragment).replaceToBackStack(null).commit()
-        }*/
+
+        contentResolver.delete(TvContract.Programs.CONTENT_URI, null, null)
+
 
         setObserver()
         val connectedPortal = intent.getSerializableExtra(Portal.PORTAL_INTENT_TAG) as Portal
         mConnectedPortal = connectedPortal
-        CoroutineScope(Dispatchers.IO).launch {
+        backgroundScope.launch {
             setupTv(connectedPortal)
         }
 
@@ -75,6 +86,8 @@ class TvActivity : FragmentActivity() {
         mConnectManager = ConnectManager(connectedPortal.serverUrl,
             connectedPortal.macAddress, connectedPortal.token)
         mProfile = mConnectManager.getProfile()
+        calculateTimeDifferenceInMillis(mProfile.defaultTimeZone!!,
+            ZoneId.systemDefault().id)
         val lastItvId = mProfile.lastItvId
         mRepository = TvRepository(this, lastItvId)
         mCategoryMap = mConnectManager.getCategories()
@@ -93,14 +106,35 @@ class TvActivity : FragmentActivity() {
                 .hide(mCategoryFragment)
                 .commit()
             mCategoryFragment.setCategories(mCategoryMap.values.toList())
-
             switchChannel(lastChannel)
             tune()
         }
         mSetupEnd = true
-
+        syncProgram()
     }
 
+    private fun syncProgram(){
+        val persistableBundle = PersistableBundle()
+        val portalInstanceArray =
+            arrayOf(mConnectedPortal.serverUrl,
+            mConnectedPortal.macAddress,
+            mConnectedPortal.token)
+
+        persistableBundle.putStringArray(Portal.PORTAL_JOB_INTENT_TAG, portalInstanceArray)
+        val componentName = ComponentName(this, ProgramSyncService::class.java)
+        val jobInfo: JobInfo = JobInfo.Builder(1, componentName)
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+            .setExtras(persistableBundle)
+            .build()
+        val jobScheduler: JobScheduler =
+            getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        jobScheduler.schedule(jobInfo)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        tune()
+    }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (mSetupEnd){
@@ -137,7 +171,6 @@ class TvActivity : FragmentActivity() {
                 }
             }
         }
-
         return super.onKeyUp(keyCode, event)
     }
 
@@ -155,10 +188,7 @@ class TvActivity : FragmentActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-//        tune()
-    }
+
 
     private fun keyDownChannel(keyCode:Int){
         val channel: Channel = if(keyCode == KeyEvent.KEYCODE_CHANNEL_UP){
@@ -175,7 +205,7 @@ class TvActivity : FragmentActivity() {
         val groupId = channel.getGenreId()!!
         binding.tvView.tune(inputId, channel.getUri())
         listViewModel.set(groupId)
-        CoroutineScope(Dispatchers.IO).launch {
+        backgroundScope.launch {
             mConnectManager.setLastId(channel.originalNetworkId!!)
         }
     }
@@ -186,7 +216,7 @@ class TvActivity : FragmentActivity() {
     }
 
     fun switchChannel(channel: Channel){
-        viewModel.update(channel)
+        viewModel.update(channel, contentResolver, mProfile.defaultTimeZone!!)
     }
 
 
@@ -266,7 +296,7 @@ class TvActivity : FragmentActivity() {
         }
 
         private fun setVideo(tracks: MutableList<TvTrackInfo>){
-            CoroutineScope(Dispatchers.IO).launch {
+            backgroundScope.launch {
                 var videoInfo: TvTrackInfo? = null
                 for (trackInfo in tracks) {
                     if (trackInfo.type == TvTrackInfo.TYPE_VIDEO) {
@@ -287,6 +317,7 @@ class TvActivity : FragmentActivity() {
                 if (videoResolution == null) {
                     videoResolution = VideoResolution.SD
                 }
+                Log.d(TAG, videoResolution.name)
                 withContext(Dispatchers.Main){
                     viewModel.setResolution(videoResolution)
                 }

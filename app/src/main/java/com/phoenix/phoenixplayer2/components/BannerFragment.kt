@@ -1,6 +1,6 @@
 package com.phoenix.phoenixplayer2.components
 
-import android.media.tv.TvView
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -18,11 +18,18 @@ import com.phoenix.phoenixplayer2.databinding.FragmentBannerBinding
 import com.phoenix.phoenixplayer2.model.Channel
 import com.phoenix.phoenixplayer2.model.enums.VideoResolution
 import com.phoenix.phoenixplayer2.viewmodel.TvViewModel
+import org.threeten.bp.Instant
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
+
 
 class BannerFragment: Fragment() {
 
     private lateinit var binding:FragmentBannerBinding
     private lateinit var mRootActivity: TvActivity
+    private lateinit var mZoneId: String
 
     var bannerOsdTimeout:Long = 7500L
     companion object {
@@ -36,6 +43,7 @@ class BannerFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mRootActivity = (requireActivity() as TvActivity)
+        mZoneId = mRootActivity.mProfile.defaultTimeZone!!
     }
 
     override fun onCreateView(
@@ -46,6 +54,14 @@ class BannerFragment: Fragment() {
         binding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_banner, container, false)
         binding.viewModel = mRootActivity.viewModel
+
+
+        return binding.root
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val tvViewModel = binding.viewModel as TvViewModel
         tvViewModel.currentChannel.observe(viewLifecycleOwner){
             if (it.displayNumber != INVALID_NUMBER){
@@ -61,10 +77,30 @@ class BannerFragment: Fragment() {
                 binding.videoType.text = it.name
             }
         }
+        tvViewModel.currentProgram.observe(viewLifecycleOwner){
+            if (it != null){
+                val title:String = it.title!!
+                val start:String = convertMillisToHumanDate(it.startTimeMillis!!, mZoneId)
+                val end:String = convertMillisToHumanDate(it.endTimeMillis!!, mZoneId)
+                binding.programText.text = "$title  $start ~ $end"
+            }
+            else{
+                binding.programText.text = "No Information"
+            }
 
-        return binding.root
+        }
+        tvViewModel.nextProgram.observe(viewLifecycleOwner){
+            if (it != null){
+                val title = it.title
+                val start = convertMillisToHumanDate(it.startTimeMillis!!, mZoneId)
+                binding.nextProgramText.text = "$title  $start ~"
+            }
+            else{
+                binding.nextProgramText.text = ""
+            }
+
+        }
     }
-
 
     override fun onStop() {
         super.onStop()
@@ -96,5 +132,13 @@ class BannerFragment: Fragment() {
     }
 
 
+    fun convertMillisToHumanDate(millis: Long, zoneId: String): String {
+        val instant = Instant.ofEpochMilli(millis)
+        val zone:ZoneId = ZoneId.of(zoneId)
+        val zonedDateTime = ZonedDateTime.ofInstant(instant, zone)
+
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        return formatter.format(zonedDateTime)
+    }
 
 }

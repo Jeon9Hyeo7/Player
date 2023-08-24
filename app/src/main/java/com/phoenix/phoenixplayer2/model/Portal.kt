@@ -29,6 +29,7 @@ data class Portal(
 
     companion object {
         const val PORTAL_INTENT_TAG:String = "intent_portal"
+        const val PORTAL_JOB_INTENT_TAG:String = "intent_portal_job"
     }
 
     @PrimaryKey(autoGenerate = true)

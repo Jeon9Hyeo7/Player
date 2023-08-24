@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="main_page_top_margin">120dp</dimen>
+    <dimen name="detail_cardview_width">140dp</dimen>
+    <dimen name="detail_cardview_height">175dp</dimen>
 </resources>

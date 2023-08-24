@@ -6,6 +6,7 @@ import android.media.tv.TvTrackInfo
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.Surface
 import com.google.android.exoplayer2.Format
 import com.google.android.exoplayer2.Player
@@ -38,10 +39,12 @@ class InputService : TvInputService(){
 
         init {
             mPlayer = TvPlayer(this@InputService)
+            mPlayer?.addListener(this)
         }
 
         override fun onRelease() {
             mPlayer?.release()
+            mPlayer?.removeListener(this)
         }
 
         override fun onSetSurface(surface: Surface?): Boolean {
@@ -65,6 +68,7 @@ class InputService : TvInputService(){
         override fun onPlaybackStateChanged(playbackState: Int) {
             super.onPlaybackStateChanged(playbackState)
             if (playbackState == Player.STATE_READY) {
+
                 notifyTracksChanged(getTracks())
                 for (trackInfo in getTracks()!!) {
                     notifyTrackSelected(trackInfo.type, trackInfo.id)

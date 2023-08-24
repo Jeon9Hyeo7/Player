@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import androidx.leanback.widget.*
 import com.lib.leanback.SingleLineVerticalFragment
@@ -15,6 +16,7 @@ import kotlinx.coroutines.*
 class ChannelListFragment()
     : SingleLineVerticalFragment() {
 
+
     private lateinit var mChannelsAdapter: ArrayObjectAdapter
     private lateinit var mChannelsViewModel: ListViewModel
     private lateinit var mTvActivity: TvActivity
@@ -25,6 +27,7 @@ class ChannelListFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         mTvActivity = activity as TvActivity
         mChannelsAdapter = ArrayObjectAdapter(ChannelListPresenter())
         onItemViewClickedListener = ChannelItemClickListener()
@@ -44,7 +47,6 @@ class ChannelListFragment()
                 mSelectedChannel = item
             }
         }
-
     }
 
     inner class ChannelItemClickListener : OnItemViewClickedListener {
