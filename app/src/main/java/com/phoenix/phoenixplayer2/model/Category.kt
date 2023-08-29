@@ -15,6 +15,9 @@ data class Category(
     val activeSub: Boolean? = false,
     val censored: Boolean? = false
 ){
+    companion object{
+        const val FAVORITE = "FAVORITE"
+    }
 
     override fun toString(): String {
         return "Category{id:$id, title:$title}"

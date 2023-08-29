@@ -9,6 +9,7 @@ import android.media.tv.TvContract
 import android.os.RemoteException
 import android.util.Log
 import com.phoenix.phoenixplayer2.api.ConnectManager
+import com.phoenix.phoenixplayer2.api.TimeUtils
 import com.phoenix.phoenixplayer2.model.Channel
 import com.phoenix.phoenixplayer2.model.Portal
 import com.phoenix.phoenixplayer2.model.Program
@@ -45,132 +46,108 @@ class ProgramSyncService: JobService() {
         val serverUrl = serverParameters!![0]
         val macAddress = serverParameters[1]
         val token = serverParameters[2]
+        val timeZone = serverParameters[3]
         val connectManager = ConnectManager(serverUrl, macAddress, token)
         mRepository = TvRepository(context = context)
         val allChannels = mRepository.getChannelsMap()
+        contentResolver.delete(TvContract.Programs.CONTENT_URI, null, null)
         allChannels.forEach {
             val list = it.value
             list.forEach {channel->
                 val programs = connectManager.getAllProgramsForChannel(channel = channel, 0)
                 if (programs != null){
                     if (programs.isNotEmpty()){
-                        updatePrograms(channel, programs = programs)
+                        updatePrograms(channel, programs = programs, zoneId = timeZone)
                     }
                 }
             }
         }
     }
 
-    private fun updatePrograms(channel: Channel, programs: List<Program>){
+
+    private fun updatePrograms(channel: Channel, programs: List<Program>, zoneId: String){
         val oldPrograms = TvRepository.getPrograms(contentResolver,
             channelUri = channel.getUri())!!
         val newPrograms = programs
-        val fetchedProgramsCount = newPrograms.size
-        val firstNewProgram = newPrograms[0]
-        var oldProgramsIndex = 0
-        var newProgramsIndex = 0
-        // Skip the past programs. They will be automatically removed by the system.
-        // Skip the past programs. They will be automatically removed by the system.
+        val ops = ArrayList<ContentProviderOperation>()
+
         for (program in oldPrograms) {
-            if (program.endTimeMillis!! < System.currentTimeMillis()
-                || program.endTimeMillis!! < firstNewProgram.startTimeMillis!!
+            if (program.startTimeMillis!! < newPrograms[newPrograms.size-1].endTimeMillis!!
             ) {
-                oldProgramsIndex++
-            } else {
-                break
+                val uri = TvContract.buildProgramsUriForChannel(program.channelId!!,
+                    program.startTimeMillis!!,
+                    program.endTimeMillis!!)
+
+                ops.add(ContentProviderOperation
+                    .newDelete(uri)
+                    .build())
+
+            }
+            if (ops.size > 100
+            ) {
+                applyBatch(ops)
+                ops.clear()
             }
         }
         // Compare the new programs with old programs one by one and update/delete the old one
         // or insert new program if there is no matching program in the database.
-        val ops = ArrayList<ContentProviderOperation>()
-        while (newProgramsIndex < fetchedProgramsCount) {
-            val oldProgram =
-                if (oldProgramsIndex < oldPrograms.size) oldPrograms[oldProgramsIndex]
-                else null
-            val newProgram = newPrograms[newProgramsIndex]
-            var addNewProgram = false
-            if (oldProgram != null) {
-                if (oldProgram.equals(newProgram)) {
-                    // Exact match. No need to update. Move on to the next programs.
-                    oldProgramsIndex++
-                    newProgramsIndex++
-                } else if (shouldUpdateProgramMetadata(oldProgram, newProgram)) {
-                    // Partial match. Update the old program with the new one.
-                    // NOTE: Use 'update' in this case instead of 'insert' and 'delete'. There
-                    // could be application specific settings which belong to the old program.
-                    ops.add(
-                        ContentProviderOperation.newUpdate(
-                            TvContract.buildProgramUri(oldProgram.id!!)
-                        )
-                            .withValues(newProgram.toContentValues())
-                            .build()
-                    )
+        val lastProgramEnd: Long = if (oldPrograms.isEmpty()){
+            Long.MIN_VALUE
+        }
+        else{
+            oldPrograms[oldPrograms.size-1].endTimeMillis!!
+        }
 
-                    oldProgramsIndex++
-                    newProgramsIndex++
-                } else if (oldProgram.endTimeMillis!!
-                    < newProgram.endTimeMillis!!
-                ) {
-                    // No match. Remove the old program first to see if the next program in
-                    // {@code oldPrograms} partially matches the new program.
-                    ops.add(
-                        ContentProviderOperation.newDelete(
-                            TvContract.buildProgramUri(oldProgram.id!!)
-                        )
-                            .build()
-                    )
 
-                    oldProgramsIndex++
-                } else {
-                    // No match. The new program does not match any of the old programs. Insert
-                    // it as a new program.
-                    addNewProgram = true
-                    newProgramsIndex++
-
-                }
-            } else {
-                // No old programs. Just insert new programs.
-                addNewProgram = true
-                newProgramsIndex++
-            }
-            if (addNewProgram) {
+        for (newProgram in newPrograms) {
+            if (lastProgramEnd < newProgram.startTimeMillis!!){
                 ops.add(
                     ContentProviderOperation.newInsert(TvContract.Programs.CONTENT_URI)
                         .withValues(newProgram.toContentValues())
                         .build()
                 )
-
+                if (ops.size > 100
+                ) {
+                    applyBatch(ops)
+                    ops.clear()
+                }
             }
+
             // Throttle the batch operation not to cause TransactionTooLargeException.
-            if (ops.size > 100
-                || newProgramsIndex >= fetchedProgramsCount
-            ) {
-                try {
-                    contentResolver.applyBatch(TvContract.AUTHORITY, ops)
-                } catch (e: RemoteException) {
-                    Log.e(
-                        "TAG",
-                        "Failed to insert programs.",
-                        e
-                    )
-
-                    return
-                } catch (e: OperationApplicationException) {
-                    Log.e(
-                        "TAG",
-                        "Failed to insert programs.",
-                        e
-                    )
-
-                    return
-                }
-                catch (e: IllegalArgumentException){
-
-                }
-
-                ops.clear()
-            }
         }
+    }
+
+
+
+    private fun applyBatch(ops: ArrayList<ContentProviderOperation>){
+        try {
+            contentResolver.applyBatch(TvContract.AUTHORITY, ops)
+        } catch (e: RemoteException) {
+            Log.e(
+                "TAG",
+                "Failed to insert programs.",
+                e
+            )
+
+            return
+        } catch (e: OperationApplicationException) {
+            Log.e(
+                "TAG",
+                "Failed to insert programs.",
+                e
+            )
+
+            return
+        }
+        catch (e: IllegalArgumentException){
+            /*Log.e(
+                "TAG",
+                "Failed to insert programs.",
+                e
+            )*/
+        }
+
+
     }
     private fun shouldUpdateProgramMetadata(oldProgram: Program, newProgram: Program): Boolean {
         // NOTE: Here, we update the old program if it has the same title and overlaps with the

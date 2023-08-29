@@ -130,25 +130,27 @@
 
         <ImageView
             android:id = "@+id/channel_favorite"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint = "#FF888888"
-            app:layout_constraintBottom_toTopOf="@id/current_time"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="@id/channel_lock"
+            app:layout_constraintEnd_toStartOf="@id/channel_lock"
+            android:src = "@drawable/ic_fav"
+            android:visibility="gone"
+            tools:visibility="visible"
             />
 
 
         <ImageView
             android:id = "@+id/channel_lock"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="30dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint = "#7D7D96"
             app:layout_constraintBottom_toTopOf="@id/current_time"
-            app:layout_constraintEnd_toStartOf="@id/channel_favorite"
+            app:layout_constraintEnd_toEndOf="@id/current_time"
+            android:src = "@drawable/ic_lock"
+            android:visibility="gone"
+            tools:visibility="visible"
             />
 
         <View
@@ -186,7 +188,7 @@
             android:layout_marginBottom="10dp"
             app:layout_constraintEnd_toEndOf="@id/progress_bar"
             app:layout_constraintBottom_toTopOf="@id/progress_bar"
-            />
+            tools:ignore="RtlSymmetry" />
 
 
         <SeekBar

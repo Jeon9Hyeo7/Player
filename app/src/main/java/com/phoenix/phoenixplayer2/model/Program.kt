@@ -14,8 +14,6 @@ data class Program(
 
     companion object{
 
-
-
         fun fromCursor(cursor: Cursor):Program{
             var index = 0
             var id: Long? = -1

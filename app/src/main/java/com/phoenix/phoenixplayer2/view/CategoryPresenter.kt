@@ -31,11 +31,16 @@ class CategoryPresenter: Presenter() {
     inner class CategoryViewHolder(private val binding:ItemCategoryBinding)
         : Presenter.ViewHolder(binding.root){
         fun onBind(item: Any?){
-            if (item is Category){
-                binding.categoryText.text = item.title
-            }
-            else if (item is VodCategory){
-                binding.categoryText.text = item.categoryStr
+            when (item) {
+                is Category -> {
+                    binding.categoryText.text = item.title
+                }
+                is VodCategory -> {
+                    binding.categoryText.text = item.categoryStr
+                }
+                is String -> {
+                    binding.categoryText.text = item
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.phoenix.phoenixplayer2.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.phoenix.phoenixplayer2.model.enums.EPGMode
@@ -33,7 +34,8 @@ data class Portal(
     }
 
     @PrimaryKey(autoGenerate = true)
-    var id: Long= -1
+    @ColumnInfo(name = "_id")
+    var id: Long?= null
 
 
 

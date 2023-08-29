@@ -118,7 +118,7 @@ class PortalEditFragment(private var portal: Portal? = null) : Fragment(){
         val epgOffset = binding.spinnerEpgOffset.selectedItem as EPGOffset
         val grouping = binding.spinnerGrouping.selectedItem as GroupChannelNumbering
         val macType = binding.spinnerMacType.selectedItem as MacType
-        val defaultMacAddress = DeviceManager().getMacAddress()
+        val defaultMacAddress = DeviceManager.getMacAddress()
         val macAddress:String = when (macType){
             MacType.Default -> {
                 macType.getAddress() + defaultMacAddress.substring(8, 17)

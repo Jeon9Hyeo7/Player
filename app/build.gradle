@@ -31,6 +31,8 @@ android {
 
 dependencies {
     implementation project(':lib_leanback')
+    implementation project(':lib_epg')
+    implementation project(':ffmpeg')
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.leanback:leanback:1.0.0'
     implementation 'com.github.bumptech.glide:glide:4.14.2'
@@ -50,4 +52,5 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-common:2.19.1'
     implementation 'com.google.android.exoplayer:exoplayer:2.19.1'
     implementation "com.google.android.exoplayer:extension-leanback:2.19.1"
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 }

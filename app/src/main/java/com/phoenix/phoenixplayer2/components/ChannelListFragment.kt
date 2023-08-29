@@ -8,6 +8,7 @@ import android.view.KeyEvent
 import android.view.View
 import androidx.leanback.widget.*
 import com.lib.leanback.SingleLineVerticalFragment
+import com.phoenix.phoenixplayer2.model.Category
 import com.phoenix.phoenixplayer2.model.Channel
 import com.phoenix.phoenixplayer2.view.ChannelListPresenter
 import com.phoenix.phoenixplayer2.viewmodel.ListViewModel
@@ -106,12 +107,22 @@ class ChannelListFragment()
             if (mChannelsAdapter.size() > 0){
                 mChannelsAdapter.clear()
             }
-            val newList = repository.getGroup(it)
-            if (newList != null){
-                mUpdateHandler.postDelayed({
-                    mChannelsAdapter.addAll(0, newList)
-                }, 550)
+            if (it == Category.FAVORITE){
+                val favList = mTvActivity.mFavoriteList
+                favList.forEach { ext->
+                    val channel = ext.toChannel(requireContext())
+                    mChannelsAdapter.add(channel)
+                }
             }
+            else{
+                val newList = repository.getGroup(it)
+                if (newList != null){
+                    mUpdateHandler.postDelayed({
+                        mChannelsAdapter.addAll(0, newList)
+                    }, 550)
+                }
+            }
+
         }
     }
 

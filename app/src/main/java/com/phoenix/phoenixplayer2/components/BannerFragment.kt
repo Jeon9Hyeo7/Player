@@ -10,6 +10,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -98,8 +99,8 @@ class BannerFragment: Fragment() {
             else{
                 binding.nextProgramText.text = ""
             }
-
         }
+
     }
 
     override fun onStop() {
@@ -129,6 +130,15 @@ class BannerFragment: Fragment() {
         bannerAnimationHandler.postDelayed({
             sfm.beginTransaction().hide(this@BannerFragment).commit()
         }, bannerOsdTimeout)
+        val insertFav = !mRootActivity.mFavoriteList.none {
+            it.channelId == channel.id
+        }
+        val insertLock = !mRootActivity.mLockedList.none {
+            it.channelId == channel.id
+        }
+
+        setFavorite(insertFav)
+        setLock(insertLock)
     }
 
 
@@ -139,6 +149,24 @@ class BannerFragment: Fragment() {
 
         val formatter = DateTimeFormatter.ofPattern("HH:mm")
         return formatter.format(zonedDateTime)
+    }
+
+    fun setFavorite(insert: Boolean) {
+        binding.channelFavorite.visibility =
+            if (insert){
+            VISIBLE
+            } else{
+            GONE
+            }
+    }
+
+    fun setLock(insert: Boolean) {
+        binding.channelLock.visibility =
+            if (insert){
+                VISIBLE
+            } else{
+                GONE
+            }
     }
 
 }

@@ -78,6 +78,8 @@ class TvViewModel() : ViewModel() {
                     currentProgram = it
                 }
             }
+
+
             withContext(Dispatchers.Main){
                 this@TvViewModel.programs.value =programList
                 if (currentProgram != null &&
@@ -97,6 +99,8 @@ class TvViewModel() : ViewModel() {
     fun setResolution(resolution: VideoResolution){
         this.resolution.value = resolution
     }
+
+
 
 
 }

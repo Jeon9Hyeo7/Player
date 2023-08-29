@@ -18,6 +18,7 @@ class CategoryFragment: SingleLineVerticalFragment() {
             = ArrayObjectAdapter(CategoryPresenter())
 
     private lateinit var mListViewModel: ListViewModel
+    private var mSelectedCategory: Any? = null
 
 
     companion object{
@@ -34,7 +35,8 @@ class CategoryFragment: SingleLineVerticalFragment() {
     }
 
     fun setCategories(categories: List<Category>){
-        mCategoryAdapter.addAll(0, categories)
+        mCategoryAdapter.add(Category.FAVORITE)
+        mCategoryAdapter.addAll(1, categories)
     }
 
     private fun setEventListener() {
@@ -42,8 +44,12 @@ class CategoryFragment: SingleLineVerticalFragment() {
             mTvActivity.popCategory()
         }
         setOnItemViewSelectedListener { _, item, _, _ ->
-            if (item is Category){
+            mSelectedCategory = if (item is Category){
                 mListViewModel.selectCategory(item.id!!)
+                item
+            } else{
+                mListViewModel.selectCategory(Category.FAVORITE)
+                Category.FAVORITE
             }
         }
     }
@@ -51,9 +57,17 @@ class CategoryFragment: SingleLineVerticalFragment() {
     fun show() {
         val selectedChannel = mTvActivity.getChannelListInstance()
         var index = -1
-        for (i in 0 until mCategoryAdapter.size()) {
-            if ((mCategoryAdapter[i] as Category).id == selectedChannel.getGenreId()){
-                index = i
+        if (mSelectedCategory == Category.FAVORITE){
+            index = 0
+        }
+        else{
+            for (i in 0 until mCategoryAdapter.size()) {
+                val category = mCategoryAdapter[i]
+                if (category is Category){
+                    if (category.id == selectedChannel.getGenreId()){
+                        index = i
+                    }
+                }
             }
         }
         super.show(index, CATEGORY_BACKSTACK)

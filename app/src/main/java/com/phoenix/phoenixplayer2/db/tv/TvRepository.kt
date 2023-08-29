@@ -9,12 +9,12 @@ import android.util.Log
 import com.phoenix.phoenixplayer2.model.Channel
 import com.phoenix.phoenixplayer2.model.Program
 
-class TvRepository(val context: Context, private val lastChannelId: Long? = -1) {
+class TvRepository(val context: Context,
+                   private val lastChannelId: Long? = -1) {
     private var mChannelsMap:Map<String, List<Channel>>
     private var mLastChannel:Channel?
 
     init {
-
         val allList:MutableMap<String, MutableList<Channel>> = mutableMapOf()
         val cursor = context.contentResolver.query(TvContract.Channels.CONTENT_URI,
             Channel.projection, null, null, null)
@@ -32,7 +32,7 @@ class TvRepository(val context: Context, private val lastChannelId: Long? = -1) 
     }
 
     companion object {
-        suspend fun getChannel(context: Context, channelUri: Uri): Channel?{
+        fun getChannel(context: Context, channelUri: Uri): Channel?{
             var cursor:Cursor? = null
             try {
                 cursor = context.contentResolver.query(channelUri,
@@ -90,6 +90,25 @@ class TvRepository(val context: Context, private val lastChannelId: Long? = -1) 
             return programs
         }
 
+        fun getProgram(resolver: ContentResolver?, programUri: Uri?): Program?{
+            var cursor: Cursor? = null
+            return try {
+                cursor = resolver!!.query(
+                    programUri!!, Program.PROJECTION,
+                    null, null, null
+                )
+                if (cursor == null || cursor.count == 0) {
+                    return null
+                }
+                cursor.moveToNext()
+                Program.fromCursor(cursor)
+            } catch (e: java.lang.Exception) {
+
+                return null
+            } finally {
+                cursor?.close()
+            }
+        }
     }
 
     fun getLastChannel():Channel?{

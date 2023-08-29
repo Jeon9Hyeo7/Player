@@ -12,6 +12,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+        <androidx.fragment.app.FragmentContainerView
+            android:id = "@+id/epg_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+
+            />
+
+
         <android.media.tv.TvView
             android:id="@+id/tv_view"
             android:layout_width="match_parent"

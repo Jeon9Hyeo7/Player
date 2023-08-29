@@ -10,4 +10,7 @@
 
     <color name="red_gray">#C0AFB4</color>
 
+    <color name="alpha_yellow">#BFFFF53F</color>
+    <color name="alpha_blue">#BF0064F0</color>
+
 </resources>

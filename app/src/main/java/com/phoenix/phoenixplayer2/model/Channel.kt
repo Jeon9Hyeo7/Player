@@ -4,7 +4,10 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.media.tv.TvContract
 import android.net.Uri
+import android.text.Spanned
+import android.text.SpannedString
 import android.util.Log
+import com.egeniq.androidtvprogramguide.entity.ProgramGuideChannel
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -16,7 +19,7 @@ data class Channel(
     var packageName: String?= "com.phoenix.phoenixplayer2",
     var originalNetworkId: Long? = -1,
     var internalProviderData: InternalProviderData? = null
-){
+): ProgramGuideChannel{
 
     companion object{
         const val INVALID_CHANNEL_ID: Long = -1
@@ -203,7 +206,17 @@ data class Channel(
         }
     }
 
+    override val chId: String
+        get() = "$id"
+    override val name: Spanned?
+        get() = SpannedString(displayName)
+    override val imageUrl: String?
+        get() = getLogo()
+
     override fun toString(): String {
         return "Channel{${displayNumber}.$displayName}"
     }
+
+
+
 }
