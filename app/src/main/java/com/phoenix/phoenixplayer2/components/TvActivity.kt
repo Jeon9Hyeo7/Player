@@ -102,7 +102,7 @@ class TvActivity : FragmentActivity() {
         withContext(Dispatchers.Main){
             mExtensionRepository.getFavorite()?.observe(this@TvActivity){
                 mFavoriteList = it
-                Log.d(TAG, "$it")
+
 
             }
             mExtensionRepository.getLocked()?.observe(this@TvActivity){
@@ -243,7 +243,12 @@ class TvActivity : FragmentActivity() {
                         val insert = mLockedList.none() {
                             it.channelId == mCurrentChannel?.id
                         }
-                        setLock(insert, mCurrentChannel!!)
+                        if (insert){
+                            setLock(mCurrentChannel!!)
+                        }
+                        else {
+                            getAuthentication(ParentalControlFragment.AUTH_FOR_UNLOCK)
+                        }
                     }
 
                 }
@@ -251,28 +256,29 @@ class TvActivity : FragmentActivity() {
         }
     }
 
-    private suspend fun setLock(insert: Boolean, channel: Channel) {
+    private suspend fun setLock(channel: Channel) {
         val title = mConnectedPortal.title
         val channelId = channel.id!!
-        var extension : Extension? = null
-        if (insert){
-            extension = Extension(channelId = channelId, portalName = title, type = Extension.TYPE_LOCKED)
-            mExtensionRepository.insert(extension)
-        }
-        else{
-            mLockedList.forEach {
-                if (it.channelId == channelId){
-                    extension = it
-                }
-            }
-            extension?.let {
-                mExtensionRepository.delete(it)
-            }
-        }
-        mBannerFragment.setLock(insert)
+        val extension = Extension(channelId = channelId,
+            portalName = title,
+            type = Extension.TYPE_LOCKED)
+        mExtensionRepository.insert(extension)
+        mBannerFragment.setLock(true)
 //        this@TvActivity.mFavoriteList = mExtensionRepository.getFavorite()!!
+    }
 
-
+    suspend fun unLock(){
+        val channel = mCurrentChannel!!
+        var extension:Extension? = null
+        mLockedList.forEach {
+            if (it.channelId == channel.id){
+                extension = it
+            }
+        }
+        extension?.let {
+            mExtensionRepository.delete(it)
+        }
+        mBannerFragment.setLock(false)
     }
 
 
@@ -366,11 +372,15 @@ class TvActivity : FragmentActivity() {
         switchChannel(channel)
     }
 
-    fun tune(){
-        if (!isRecording){
-            val channel = mCurrentChannel!!
-            val inputId = channel.inputId!!
-            val groupId = channel.getGenreId()!!
+    fun tune(auth:Boolean? = false){
+        val channel = mCurrentChannel!!
+        val inputId = channel.inputId!!
+        val groupId = channel.getGenreId()!!
+        var isLocked = isLocked(channel)
+        if (auth == true){
+            isLocked = false
+        }
+        if (!isRecording && !isLocked){
             binding.tvView.tune(inputId, channel.getUri())
             recordingClient.tune(inputId, channel.getUri())
             listViewModel.set(groupId)
@@ -378,26 +388,35 @@ class TvActivity : FragmentActivity() {
                 mConnectManager.setLastId(channel.originalNetworkId!!)
             }
         }
+        if (isLocked){
+            binding.tvView.reset()
+            getAuthentication(ParentalControlFragment.AUTH_FOR_TUNE)
+        }
+    }
+
+    fun getAuthentication(type: String){
+        supportFragmentManager.beginTransaction()
+            .add(R.id.tv_root, ParentalControlFragment(type = type))
+            .addToBackStack(null)
+            .commit()
     }
 
 
     fun getRepository(): TvRepository {
         return mRepository
     }
-
-    fun switchChannel(channel: Channel){
-        val isLocked = !mLockedList.none{
+    fun isLocked(channel: Channel):Boolean{
+        return !mLockedList.none{
             it.channelId == channel.id
         }
-        if (!isRecording && !isLocked){
+    }
+
+    fun switchChannel(channel: Channel){
+        if (!isRecording){
             viewModel.update(channel, contentResolver, mProfile.defaultTimeZone!!)
         }
-        else if (isLocked){
 
-        }
-        else if (isRecording){
 
-        }
     }
 
 
@@ -416,12 +435,7 @@ class TvActivity : FragmentActivity() {
                 listViewModel.set(it)
             }
         }
-        /*mFavoriteList.observe(this@TvActivity){
 
-        }
-        mLockedList.observe(this@TvActivity){
-
-        }*/
 
     }
 

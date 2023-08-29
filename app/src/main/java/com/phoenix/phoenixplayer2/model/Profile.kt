@@ -16,6 +16,8 @@ data class Profile(
     val pass:String? ="",
     @JsonProperty("version")
     val version:String? = "",
+    @JsonProperty("parent_password")
+    var parentPassword:String? = "0000",
     @JsonProperty("last_itv_id")
     val lastItvId:Long? = -1,
     @JsonProperty("updated")
@@ -24,6 +26,11 @@ data class Profile(
     val defaultLocale:String? = "",
     @JsonProperty("default_timezone")
     val defaultTimeZone:String? = "") {
+
+
+    fun setParentalPassword(passWord: String){
+        this.parentPassword = passWord
+    }
 
 //    val timeZone:ZoneId = ZoneId.of(defaultTimeZone)
 
