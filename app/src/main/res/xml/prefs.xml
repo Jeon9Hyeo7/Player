@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/setting"
+    >
+    <PreferenceCategory
+        android:title="@string/setting"
+        >
+        <PreferenceScreen
+            android:key="prefs_portal_key"
+            android:title="Information">
+
+            <PreferenceCategory
+                android:key="prefs_portal_prop_key"
+                android:title="Information">
+
+                <Preference
+                    android:key="prefs_portal_info_key"
+                    android:icon="@drawable/ic_portal"
+                    android:title="@string/settings_portal_information"
+                    android:summary="This is information when registering the portal."
+                    />
+
+
+                <Preference
+                    android:key="prefs_box_info_key"
+                    android:icon="@drawable/ic_stb"
+                    android:title="@string/settings_box_information"
+                    android:summary="This is information when registering the portal."
+                    />
+
+
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+</PreferenceScreen>

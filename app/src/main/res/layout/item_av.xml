@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="track"
+            type="android.media.tv.TvTrackInfo" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        >
+        <TextView
+            android:background="@drawable/list_item_default"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:text="@{track.type == 0 ? track.description + (track.language != null ? ` - ` + track.language : ``) : track.description}"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textSize="24sp"
+            android:gravity="center_vertical"
+            tools:text = "mp4- en"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

@@ -2,6 +2,7 @@ package com.phoenix.phoenixplayer2.viewmodel
 
 import android.content.ContentResolver
 import android.content.Context
+import android.media.tv.TvTrackInfo
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -32,6 +33,8 @@ class TvViewModel() : ViewModel() {
     private val programs = MutableLiveData<List<Program>>()
     private val mCurrentProgram = MutableLiveData<Program>()
     private val mNextProgram = MutableLiveData<Program>()
+    private val mTracks = MutableLiveData<List<TvTrackInfo>>()
+
 
 
 
@@ -58,6 +61,13 @@ class TvViewModel() : ViewModel() {
         get() {
             return mNextProgram
         }
+    val selectedTracks: LiveData<List<TvTrackInfo>>
+        get() {
+            return mTracks
+        }
+
+
+
 
 
     init {
@@ -100,7 +110,31 @@ class TvViewModel() : ViewModel() {
         this.resolution.value = resolution
     }
 
+    fun selectTrack(tracks: List<TvTrackInfo>){
+        mTracks.value = tracks
+        var videoInfo: TvTrackInfo? = null
+        for (trackInfo in tracks) {
+            if (trackInfo.type == TvTrackInfo.TYPE_VIDEO) {
+                videoInfo = trackInfo
 
+            }
+        }
+        var videoResolution: VideoResolution? = null
+        if (videoInfo != null) {
+            val videoWidth = videoInfo.videoWidth
+            val videoHeight = videoInfo.videoHeight
+            for (resolution in VideoResolution.values()) {
+                if (videoWidth == resolution.width && videoHeight == resolution.height) {
+                    videoResolution = resolution
+                    break
+                }
+            }
+        }
+        if (videoResolution == null) {
+            videoResolution = VideoResolution.SD
+        }
+        this.resolution.value = videoResolution
+    }
 
 
 }

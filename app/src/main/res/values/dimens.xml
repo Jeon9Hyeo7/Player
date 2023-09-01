@@ -9,4 +9,7 @@
     <dimen name="tv_view_scaled_height">160dp</dimen>
     <dimen name="tv_view_scaled_margin_left">32dp</dimen>
     <dimen name="tv_view_scaled_margin_top">10dp</dimen>
+    <dimen name="dialog_width">350dp</dimen>
+    <dimen name="dialog_height">400dp</dimen>
+
 </resources>

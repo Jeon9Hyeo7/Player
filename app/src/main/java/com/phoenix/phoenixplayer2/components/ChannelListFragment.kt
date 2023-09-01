@@ -6,8 +6,10 @@ import android.os.Looper
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.leanback.widget.*
 import com.lib.leanback.SingleLineVerticalFragment
+import com.phoenix.phoenixplayer2.R
 import com.phoenix.phoenixplayer2.model.Category
 import com.phoenix.phoenixplayer2.model.Channel
 import com.phoenix.phoenixplayer2.view.ChannelListPresenter
@@ -74,6 +76,7 @@ class ChannelListFragment()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.background = ContextCompat.getDrawable(requireContext(), R.drawable.default_background)
         setChannelList()
     }
 

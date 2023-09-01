@@ -28,7 +28,9 @@ class ListViewModel() : ViewModel(){
     }
 
     fun set(genreId: String){
-        mGenreId.value = genreId
+        if (mGenreId.value!= genreId){
+            mGenreId.value = genreId
+        }
     }
 
     fun selectCategory(genreId: String){

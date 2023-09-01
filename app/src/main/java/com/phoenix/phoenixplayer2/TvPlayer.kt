@@ -50,6 +50,7 @@ class TvPlayer(
         player.setMediaSource(mediaSource!!)
         player.playWhenReady = true
         player.prepare()
+
     }
 
 
@@ -74,6 +75,25 @@ class TvPlayer(
 
     fun getAudioFormat(): Format? {
         return player.audioFormat
+    }
+
+    fun selectTrack(trackInfo: TvTrackInfo){
+        if (trackInfo.type == TvTrackInfo.TYPE_AUDIO){
+            if (trackInfo.language != null){
+                val parameters = DefaultTrackSelector.ParametersBuilder()
+                    .setPreferredAudioLanguage(trackInfo.language)
+                    .setTunnelingEnabled(true)
+                    // todo : if some audio track is unavailable , change Audio Track after player initialized
+                    .build()
+                (player.trackSelector as DefaultTrackSelector).parameters = parameters
+//                player.trackSelectionParameters = parameters
+                player.prepare()
+            }
+        }
+        else if (trackInfo.type == TvTrackInfo.TYPE_VIDEO){
+
+        }
+
     }
 
     fun setSurface(surface: Surface?) {

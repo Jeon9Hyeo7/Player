@@ -3,8 +3,10 @@ package com.phoenix.phoenixplayer2.components
 import android.os.Bundle
 import android.transition.TransitionManager
 import android.util.Log
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.leanback.widget.ArrayObjectAdapter
 import com.lib.leanback.SingleLineVerticalFragment
 import com.phoenix.phoenixplayer2.R
@@ -25,6 +27,10 @@ class CategoryFragment: SingleLineVerticalFragment() {
         private const val TAG = "CategoryFragment"
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.background = ContextCompat.getDrawable(requireContext(), R.drawable.default_background)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

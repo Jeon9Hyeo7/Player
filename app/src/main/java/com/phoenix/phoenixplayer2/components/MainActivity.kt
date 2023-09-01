@@ -32,6 +32,11 @@ class MainActivity : FragmentActivity() {
         if (intent.getStringExtra(Menu.TAG_PORTAL) == null){
             findHistory()
         }
+        else{
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.portal_fragment, MainFragment())
+                .commitNow()
+        }
         /*if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.portal_fragment, MainFragment())

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.JsonNode
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZoneOffset
+import java.io.Serializable
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Profile(
@@ -25,8 +26,13 @@ data class Profile(
     @JsonProperty("default_locale")
     val defaultLocale:String? = "",
     @JsonProperty("default_timezone")
-    val defaultTimeZone:String? = "") {
+    val defaultTimeZone:String? = "",
+    @JsonProperty("timezone_diff")
+    val timezoneDiff:Any? = null): Serializable {
 
+    companion object{
+        const val TAG_INTENT_PROFILE = "intent_profile"
+    }
 
     fun setParentalPassword(passWord: String){
         this.parentPassword = passWord

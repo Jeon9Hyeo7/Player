@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.Surface
+import android.widget.Toast
 import com.google.android.exoplayer2.Format
 import com.google.android.exoplayer2.Player
 import com.phoenix.phoenixplayer2.api.DeviceManager
@@ -102,6 +103,16 @@ class InputService : TvInputService(){
             }
         }
 
+        override fun onSelectTrack(type: Int, trackId: String?): Boolean {
+            getTracks()?.forEach {
+                if (it.type == type && it.id == trackId){
+                    mPlayer?.selectTrack(trackInfo = it)
+                }
+            }
+            return super.onSelectTrack(type, trackId)
+
+        }
+
         private fun setTvSurface(surface: Surface?){
             if (mPlayer != null){
                 mPlayer?.setSurface(surface)
@@ -140,6 +151,7 @@ class InputService : TvInputService(){
                         if (format.height != Format.NO_VALUE) {
                             builder.setVideoHeight(format.height)
                         }
+                        builder.setDescription(format.sampleMimeType!!)
                     } else if (trackType == TvTrackInfo.TYPE_SUBTITLE) {
                         if (format.language != null && format.language != "und") {
                             builder.setLanguage(format.language!!)
@@ -151,6 +163,17 @@ class InputService : TvInputService(){
             return trackInfos
         }
 
+        override fun onPositionDiscontinuity(
+            oldPosition: Player.PositionInfo,
+            newPosition: Player.PositionInfo,
+            reason: Int
+        ) {
+            super.onPositionDiscontinuity(oldPosition, newPosition, reason)
+            if (reason == Player.DISCONTINUITY_REASON_INTERNAL){
+                /** s*/
+                mPlayer?.seekTo(newPosition.mediaItemIndex, newPosition.positionMs)
+            }
+        }
 
 
         inner class PlayChannelRunnable: Runnable{
@@ -185,6 +208,7 @@ class InputService : TvInputService(){
                 val channel = TvRepository.getChannel(mContext, channelUri!!)
                 val title = channel?.displayName!!
                 val filePath = "${title}_${startTime}"
+                Toast.makeText(mContext, "Recording of channel ${channel.displayName} started", Toast.LENGTH_SHORT).show()
             }
 
             /*val startTime = System.currentTimeMillis()

@@ -50,6 +50,15 @@
             />
 
 
+        <!-- 프래그먼트를 중앙에 배치하고자 하는 부분 -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/centered_fragment_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

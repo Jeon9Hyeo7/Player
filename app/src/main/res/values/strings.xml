@@ -30,6 +30,12 @@
 
     <!--Tv-->
     <string name="no_information">No Information</string>
+    <string name="banner_record">Record</string>
+    <string name="banner_fav">Favorite</string>
+    <string name="banner_lock">Lock</string>
+    <string name="banner_av">Audio/Video</string>
+
+
     <string name="parental_title">Parental Password</string>
     <string name="parental_hint">PASSWORD</string>
     <string name="parental_positive">Continue</string>
@@ -50,6 +56,10 @@
     <!--VOD-->
     <string name="tmdb_server">"https://api.themoviedb.org/3/"</string>
 
+
+    <!--Settings-->
+    <string name="settings_portal_information">Portal information</string>
+    <string name="settings_box_information">Box information</string>
 
 
 </resources>

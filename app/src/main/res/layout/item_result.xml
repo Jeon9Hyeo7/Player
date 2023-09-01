@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="title"
+            type="String" />
+        <variable
+            name="result"
+            type="String" />
+    </data>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="600dp"
+        android:layout_height="50dp"
+        >
+
+        <TextView
+            android:id="@+id/settings_item_res_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_line_item"
+            android:text="@{title}"
+            tools:text = "Portal Name"
+            style="@style/Style.Settings.Result"
+            />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_line_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.33"
+
+            />
+
+        <TextView
+            android:id="@+id/settings_item_res"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_line_item"
+            android:text="@{result}"
+            tools:text = "PHOENIX"
+            style="@style/Style.Settings.Result"
+            android:paddingStart="20dp"
+            tools:ignore="RtlSymmetry" />
+        
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

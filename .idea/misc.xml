@@ -13,6 +13,9 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/edit_text_shape.xml" value="0.176" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/ic_fav.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/ic_lock.xml" value="0.1" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/ic_portal.xml" value="0.272" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/ic_stb.xml" value="0.1" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/ic_tv.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/list_item_default.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/loading.xml" value="0.125" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/movie_default.xml" value="0.1" />
@@ -25,23 +28,29 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/drawable/vod_cardview_image_shape.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/activity_detail.xml" value="0.15" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/activity_main.xml" value="0.5494791666666666" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/activity_settings.xml" value="0.19407407407407407" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/activity_tv.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/activity_vod.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/add_portal_image.xml" value="0.26458333333333334" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/banner_keyguide.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_action.xml" value="0.22" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_banner.xml" value="0.16477987421383647" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_banner.xml" value="0.15" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_details.xml" value="0.15" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_edit.xml" value="0.18" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_loading.xml" value="0.2" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_menu.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_parental_control.xml" value="0.18373071528751753" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/fragment_settings.xml" value="0.1" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/item_av.xml" value="0.25" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/item_card_view.xml" value="0.22" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/item_category.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/item_channel_list.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/item_menu.xml" value="0.22" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/item_portal.xml" value="0.309375" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/item_result.xml" value="0.15" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/portal_cardview_binding.xml" value="0.26458333333333334" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/layout/spinner_textview.xml" value="0.1" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/app/src/main/res/xml/prefs.xml" value="0.2" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/lib_epg/src/main/res/layout/programguide_fragment.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/lib_epg/src/main/res/layout/programguide_item_channel.xml" value="0.1" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/PhoenixPlayer22/lib_epg/src/main/res/layout/programguide_item_filter.xml" value="0.1" />

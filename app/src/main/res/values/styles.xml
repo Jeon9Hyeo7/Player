@@ -46,4 +46,23 @@
 
 
     </style>
+
+    <style name="Style.Settings" parent="">
+
+    </style>
+
+    <style name="Style.Settings.Result" parent="Style.Settings">
+        <item name="android:textSize">24sp</item>
+        <item name="android:gravity">center_vertical</item>
+
+    </style>
+
+    <style name="LeanbackPreferences" parent="Theme.Leanback">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">#00FFFFFF</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:colorPrimary">@color/default_background</item>
+    </style>
+
 </resources>

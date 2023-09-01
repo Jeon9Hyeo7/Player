@@ -116,8 +116,8 @@ class BannerFragment: Fragment() {
         binding.channelNumber.text = channel.displayNumber
         Glide.with(requireContext())
             .load(channel.getLogo())
-            .error(android.R.drawable.stat_notify_error)
-            .placeholder(android.R.drawable.stat_notify_error)
+            .error(R.drawable.ic_tv)
+            .placeholder(R.drawable.ic_tv)
             .centerCrop()
             .into(binding.channelLogo)
 

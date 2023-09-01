@@ -12,13 +12,13 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.lib.leanback.SingleLineVerticalFragment
@@ -30,7 +30,6 @@ import com.phoenix.phoenixplayer2.db.tv.ExtensionRepository
 import com.phoenix.phoenixplayer2.db.tv.ProgramSyncService
 import com.phoenix.phoenixplayer2.db.tv.TvRepository
 import com.phoenix.phoenixplayer2.model.*
-import com.phoenix.phoenixplayer2.model.enums.VideoResolution
 import com.phoenix.phoenixplayer2.viewmodel.ListViewModel
 import com.phoenix.phoenixplayer2.viewmodel.TvViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -38,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.threeten.bp.ZoneId
+import java.lang.Exception
 
 class TvActivity : FragmentActivity() {
 
@@ -45,7 +45,7 @@ class TvActivity : FragmentActivity() {
     private lateinit var binding: ActivityTvBinding
     private var mSetupEnd = false
     private val backgroundScope = CoroutineScope(Dispatchers.IO)
-    private lateinit var mConnectedPortal: Portal
+    lateinit var mConnectedPortal: Portal
     private lateinit var mConnectManager: ConnectManager
     lateinit var viewModel:TvViewModel
     lateinit var listViewModel: ListViewModel
@@ -65,6 +65,7 @@ class TvActivity : FragmentActivity() {
     private lateinit var mExtensionRepository: ExtensionRepository
     var mFavoriteList:List<Extension> = listOf()
     var mLockedList:List<Extension> = listOf()
+
 
 
 
@@ -102,39 +103,44 @@ class TvActivity : FragmentActivity() {
         withContext(Dispatchers.Main){
             mExtensionRepository.getFavorite()?.observe(this@TvActivity){
                 mFavoriteList = it
-
-
             }
             mExtensionRepository.getLocked()?.observe(this@TvActivity){
                 mLockedList = it
             }
         }
-        mConnectManager = ConnectManager(connectedPortal.serverUrl,
-            connectedPortal.macAddress, connectedPortal.token)
-        mProfile = mConnectManager.getProfile()
-        calculateTimeDifferenceInMillis(mProfile.defaultTimeZone!!,
-            ZoneId.systemDefault().id)
-        val lastItvId = mProfile.lastItvId
+        try {
+            mConnectManager = ConnectManager(connectedPortal.serverUrl,
+                connectedPortal.macAddress, connectedPortal.token)
+            mProfile = mConnectManager.getProfile()
 
-        mRepository = TvRepository(this, lastItvId)
-        mCategoryMap = mConnectManager.getCategories()
-        mChannelsMap = mRepository.getChannelsMap()
-        val lastChannel = mRepository.getLastChannel()!!
-        withContext(Dispatchers.Main){
-            mBannerFragment = BannerFragment()
-            mChannelListFragment = ChannelListFragment()
-            mCategoryFragment = CategoryFragment()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.banner_container, mBannerFragment)
-                .hide(mBannerFragment)
-                .replace(R.id.channel_container, mChannelListFragment)
-                .hide(mChannelListFragment)
-                .replace(R.id.category_container, mCategoryFragment)
-                .hide(mCategoryFragment)
-                .commit()
-            mCategoryFragment.setCategories(mCategoryMap.values.toList())
-            switchChannel(lastChannel)
-            tune()
+            calculateTimeDifferenceInMillis(mProfile.defaultTimeZone!!,
+                ZoneId.systemDefault().id)
+            val lastItvId = mProfile.lastItvId
+
+            mRepository = TvRepository(this, lastItvId)
+            mCategoryMap = mConnectManager.getCategories()
+            mChannelsMap = mRepository.getChannelsMap()
+            val lastChannel = mRepository.getLastChannel()!!
+            withContext(Dispatchers.Main){
+                mBannerFragment = BannerFragment()
+                mChannelListFragment = ChannelListFragment()
+                mCategoryFragment = CategoryFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.banner_container, mBannerFragment)
+                    .hide(mBannerFragment)
+                    .replace(R.id.channel_container, mChannelListFragment)
+                    .hide(mChannelListFragment)
+                    .replace(R.id.category_container, mCategoryFragment)
+                    .hide(mCategoryFragment)
+                    .commit()
+                mCategoryFragment.setCategories(mCategoryMap.values.toList())
+                switchChannel(lastChannel)
+                tune()
+        }
+        }
+        catch (e: Exception){
+            Toast.makeText(this, "Unable to get information from server. Please contact your Provider",
+                Toast.LENGTH_LONG).show()
         }
         mSetupEnd = true
         syncProgram()
@@ -228,7 +234,10 @@ class TvActivity : FragmentActivity() {
                     }
                 }
                 KeyEvent.KEYCODE_PROG_GREEN -> {
-
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.centered_fragment_container, TracksFragment())
+                        .addToBackStack(null)
+                        .commit()
                 }
                 KeyEvent.KEYCODE_PROG_YELLOW -> {
                     backgroundScope.launch {
@@ -250,7 +259,6 @@ class TvActivity : FragmentActivity() {
                             getAuthentication(ParentalControlFragment.AUTH_FOR_UNLOCK)
                         }
                     }
-
                 }
             }
         }
@@ -337,12 +345,18 @@ class TvActivity : FragmentActivity() {
                 resources.getDimensionPixelSize(R.dimen.tv_view_scaled_margin_left)
             layoutParams.topMargin =
                 resources.getDimensionPixelSize(R.dimen.tv_view_scaled_margin_top)
+            binding.bannerContainer.visibility = GONE
+            binding.categoryContainer.visibility = GONE
+            binding.channelContainer.visibility = GONE
         } else {
             supportFragmentManager.beginTransaction().hide(epgFragment!!).commit()
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
             layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
             layoutParams.leftMargin = 0
             layoutParams.topMargin = 0
+            binding.bannerContainer.visibility = VISIBLE
+            binding.categoryContainer.visibility = VISIBLE
+            binding.channelContainer.visibility = VISIBLE
         }
         binding.tvView.layoutParams = layoutParams
     }
@@ -392,6 +406,17 @@ class TvActivity : FragmentActivity() {
             binding.tvView.reset()
             getAuthentication(ParentalControlFragment.AUTH_FOR_TUNE)
         }
+        else if (isRecording){
+            binding.tvView.reset()
+            setRecordingState()
+        }
+    }
+
+    private fun setRecordingState() {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.tv_root, RecordingControlsFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     fun getAuthentication(type: String){
@@ -415,8 +440,6 @@ class TvActivity : FragmentActivity() {
         if (!isRecording){
             viewModel.update(channel, contentResolver, mProfile.defaultTimeZone!!)
         }
-
-
     }
 
 
@@ -450,7 +473,10 @@ class TvActivity : FragmentActivity() {
         if (backStackEntryCount == 0){
             mChannelListFragment.show(index, SingleLineVerticalFragment.CHANNEL_LIST_BACKSTACK)
         }
+    }
 
+    fun selectTrack(info: TvTrackInfo){
+        binding.tvView.selectTrack(info.type, info.id)
     }
 
 
@@ -476,6 +502,10 @@ class TvActivity : FragmentActivity() {
             transaction.show(mBannerFragment)
         }
         transaction.commit()
+
+        if (epgFragment?.isHidden == false){
+            epgFragment?.autoScrollToBestProgramme()
+        }
     }
 
 
@@ -490,6 +520,7 @@ class TvActivity : FragmentActivity() {
 
 
     fun getChannelListInstance(): Channel {
+
         return mChannelListFragment.mSelectedChannel
     }
 
@@ -497,36 +528,11 @@ class TvActivity : FragmentActivity() {
 
         override fun onTracksChanged(inputId: String?, tracks: MutableList<TvTrackInfo>?) {
             super.onTracksChanged(inputId, tracks)
-            setVideo(tracks!!)
+            selectTrack(tracks!!)
         }
 
-        private fun setVideo(tracks: MutableList<TvTrackInfo>){
-            backgroundScope.launch {
-                var videoInfo: TvTrackInfo? = null
-                for (trackInfo in tracks) {
-                    if (trackInfo.type == TvTrackInfo.TYPE_VIDEO) {
-                        videoInfo = trackInfo
-                    }
-                }
-                var videoResolution: VideoResolution? = null
-                if (videoInfo != null) {
-                    val videoWidth = videoInfo.videoWidth
-                    val videoHeight = videoInfo.videoHeight
-                    for (resolution in VideoResolution.values()) {
-                        if (videoWidth == resolution.width && videoHeight == resolution.height) {
-                            videoResolution = resolution
-                            break
-                        }
-                    }
-                }
-                if (videoResolution == null) {
-                    videoResolution = VideoResolution.SD
-                }
-
-                withContext(Dispatchers.Main){
-                    viewModel.setResolution(videoResolution)
-                }
-            }
+        private fun selectTrack(tracks: MutableList<TvTrackInfo>){
+            viewModel.selectTrack(tracks)
         }
     }
     inner class TvRecordingCallback : TvRecordingClient.RecordingCallback() {

@@ -8,6 +8,7 @@ import android.content.OperationApplicationException
 import android.media.tv.TvContract
 import android.os.RemoteException
 import android.util.Log
+import com.google.android.exoplayer2.audio.DefaultAudioSink
 import com.phoenix.phoenixplayer2.api.ConnectManager
 import com.phoenix.phoenixplayer2.api.TimeUtils
 import com.phoenix.phoenixplayer2.model.Channel
@@ -41,6 +42,7 @@ class ProgramSyncService: JobService() {
     }
 
     private fun updateTask(params: JobParameters){
+
         val serverParameters =
             params.extras.getStringArray(Portal.PORTAL_JOB_INTENT_TAG)
         val serverUrl = serverParameters!![0]
